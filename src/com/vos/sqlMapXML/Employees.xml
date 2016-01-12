@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+						"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+	<select id="queryAllEmployees" resultClass="com.vos.Employees">  
+	<![CDATA[
+		select * from employees 
+	]]>
+	</select>
+<select id="getAllEmployee" resultClass="com.vos.Employee" parameterClass="java.util.Map">  
+	<![CDATA[
+		select empId,empName,regDate,lastLoginDate,email,contact,loginName,roleId,title from employees 
+		]]>
+		<dynamic prepend="WHERE">      
+                 <isNotEmpty prepend="AND" property="title">       
+                     <![CDATA[ title =#title#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="roleId">       
+                     <![CDATA[ roleId =#roleId#]]>    
+                 </isNotEmpty>           
+		 </dynamic>	
+		limit #firstRow#,#pageSize#
+	
+	</select>
+	<select id="getEmployeesCount" resultClass="java.lang.Integer" >
+	<![CDATA[
+		select count(*) from employees 
+		]]>
+	
+		
+	</select>
+	
+	<select id="queryById" parameterClass="com.vos.Employees" resultClass="com.vos.Employees">  
+	<![CDATA[
+		 select * from employees where loginName=#loginName# and password=#password#
+	]]>
+	</select>
+    
+    <update id="editEmployees" parameterClass="java.util.Map">
+		<![CDATA[
+			 update employees set password=#newpassword# where loginName=#loginName# and password=#password#
+		]]>
+	</update>
+</sqlMap>

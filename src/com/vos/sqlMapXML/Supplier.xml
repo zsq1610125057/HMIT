@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+						"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	<select id="getAllSupplier" resultClass="com.vos.Supplier" parameterClass="java.util.Map">
+	<![CDATA[
+		select supId,supName,contact,address,empId,contactPersonName,totalPaymentAmount from supplier
+	]]>
+		<dynamic prepend="WHERE">
+			 <isNotNull prepend="AND" property="supName">       
+                  (supName like '%$supName$%')       
+            </isNotNull>
+             <isNotNull prepend="AND" property="contactPersonName">       
+                  (contactPersonName like '%$contactPersonName$%')       
+            </isNotNull>
+            <isNotNull prepend="AND" property="contact">       
+                  (contact like '%$contact$%')       
+            </isNotNull>
+             <isNotNull prepend="AND" property="address">       
+                  (address like '%$address$%')       
+            </isNotNull>
+            <isNotEmpty prepend="AND" property="empId">       
+                  (empId = #empId#)       
+            </isNotEmpty>          
+		</dynamic>		
+		limit #firstRow#,#pageSize#
+	</select>
+	<select id="getPaymentAmount" resultClass="com.vos.Supplier" parameterClass="java.util.Map">
+	<![CDATA[
+	   select * from supplier where supId = #supId#
+	]]>
+	</select>
+	<select id="getSupplierCount" resultClass="java.lang.Integer" parameterClass="com.vos.SupSearchVO">
+	<![CDATA[
+		select count(*) from supplier
+		]]>
+	
+		
+	</select>
+    <insert id="addSupplier" parameterClass="com.vos.Supplier">
+	<![CDATA[				  
+			insert into supplier(supName,contact,address,contactPersonName,empId) values(#supName#,#contact#,#address#,#contactPersonName#,#empId#)
+			]]>
+	</insert>
+    <update id="editSupplier" parameterClass="com.vos.Supplier">
+		<![CDATA[
+			update supplier set supName=#supName#,contact=#contact#,
+			address=#address#,contactPersonName=#contactPersonName#,empId=#empId# where supId = #supId#
+		]]>
+	</update>
+   <update id="updatePaymentAmount" parameterClass="java.util.Map">
+   <![CDATA[
+     update supplier set totalPaymentAmount=#totalPaymentAmount# where supId = #supId#
+   ]]>
+   </update>
+    <delete id="deleteSupplier" parameterClass="java.lang.Integer">
+    <![CDATA[
+      delete from supplier where supId = #supId#;
+    ]]>
+    </delete>
+	
+		
+</sqlMap>

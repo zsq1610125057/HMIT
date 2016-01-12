@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+						"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	<select id="getAllCustomer" resultClass="com.vos.Customer" parameterClass="java.util.Map">
+	<![CDATA[
+		select comName as compName,cusId,cusName,contact,address,totalMoney,empId from customer
+	]]>
+		<dynamic prepend="WHERE">
+			 <isNotNull prepend="AND" property="comName">       
+                  (comName like '%$comName$%')       
+            </isNotNull>
+            <isNotNull prepend="AND" property="cusName">       
+                  (cusName like '%$cusName$%')       
+            </isNotNull>
+             <isNotNull prepend="AND" property="contact">       
+                  (contact like '%$contact$%')       
+            </isNotNull>
+             <isNotNull prepend="AND" property="address">       
+                  (address like '%$address$%')       
+            </isNotNull>
+             <isNotEmpty prepend="AND" property="beginMoney">  
+             <![CDATA[     
+                  (totalMoney >= #beginMoney#) 
+                  ]]>      
+            </isNotEmpty>
+             <isNotEmpty prepend="AND" property="endMoney">    
+             <![CDATA[   
+                  (totalMoney <= #endMoney#) 
+                  ]]>      
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="empId">       
+                  (empId = #empId#)       
+            </isNotEmpty>          
+		</dynamic>		
+		limit #firstRow#,#pageSize#
+	</select>
+	
+	<select id="getCustomerCount" resultClass="java.lang.Integer" parameterClass="com.vos.CusSearchVO">
+	<![CDATA[
+		select count(*) from customer 
+		]]>
+	
+		
+	</select>
+
+
+	<select id="getCustomer" resultClass="com.vos.Customer">
+	<![CDATA[
+		select comName as compName,cusName,contact,address,totalMoney,empId from customer where comName =#compName#
+		]]>
+	</select>
+
+	<insert id="addCustomer" parameterClass="com.vos.Customer">
+	<![CDATA[				  
+			insert into customer(comName,cusName,contact,address,totalMoney,empId) values(#compName#,#cusName#,#contact#,#address#,#totalMoney#,#empId#)
+			]]>
+	</insert>
+	
+	<delete id="deleteCustomer" parameterClass="java.lang.Integer">
+		<![CDATA[
+			delete from customer where cusId = #cusId#
+		]]>
+		
+	</delete>
+	
+	<update id="editCustomer" parameterClass="com.vos.Customer">
+		<![CDATA[
+			update customer set comName=#compName#,cusName=#cusName#,contact=#contact#,
+			address=#address#,totalMoney=#totalMoney#,empId=#empId# where cusId = #cusId#
+		]]>
+	</update>
+	
+		
+</sqlMap>

@@ -82,7 +82,10 @@
 	<select id="getOrderListByPager" resultClass="com.vos.Order"
 		parameterClass="java.util.Map">
 			<![CDATA[
-				select equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName from (SELECT
+				select payables,invId,equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName from (SELECT
+					
+					IFNULL(po.payables,"") AS payables,
+					po.InvId AS invId,
 					po.EquDescription AS equDescription,
 					po.SellTotalPrice AS sellTotalPrice,
 					po.EquName AS equName,
@@ -131,7 +134,15 @@
 			PayRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),supId = #supId# where ordId = #ordId#
 	</update>
 	<update id="updateOrderSupInfo1" parameterClass="com.vos.Order">
-		update purchaseOrder set payRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),pWName=#payWay#,payDate=str_to_date(#payDate#, '%m/%d/%Y') where ordId = #ordId#
+		update purchaseOrder set payRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),pWName=#payWay#,payDate=str_to_date(#payDate#, '%m/%d/%Y'),payables=#payables# where ordId = #ordId#
+	</update>
+	<update id="updateorderofinv" parameterClass="com.vos.Order">
+		update purchaseOrder set status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),InvId=#invId# where ordId = #ordId#
+	</update>
+	<update id="updateOrderArrival" parameterClass="com.vos.Order">
+	
+		update purchaseOrder set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),payRemarks=#payRemarks#,status=#action#,arrivalTime=str_to_date(#arrivalTime#,'%m/%d/%Y'),payables=#payables# where  ordid = #ordId#
+
 	</update>
 	<update id="updateOrderWMId" parameterClass="java.util.Map">
 	<![CDATA[

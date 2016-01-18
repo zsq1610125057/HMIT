@@ -8,4 +8,7 @@
 insert into invoice values(#invId#,#invMoney#,#invContent#,#invType#,str_to_date(#invDate#,'%m/%d/%Y'),#invRemarks#,#proId#)
 ]]>
 </insert>
+<select id="getInvoiceList" resultClass="com.vos.Invoice"  parameterClass="java.util.Map">
+select * from invoice WHERE ProId=#proId#
+</select>
 </sqlMap>

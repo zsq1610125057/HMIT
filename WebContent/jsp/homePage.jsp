@@ -189,7 +189,7 @@
 	</noscript>
 	<div region="north" split="true" border="false"
 		style="overflow: hidden; height: 30px; background: url(images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%; line-height: 20px; color: #fff; font-family: Verdana, 微软雅黑, 黑体">
-		<span style="float: right; padding-right: 20px;" class="head">你好，<%=HmitUtil.CURRENT_USER%>
+		<span style="float: right; padding-right: 20px;" class="head">你好， <%=HmitUtil.CURRENT_USER%> 
 			<a href="javascript:void(0)" id="editpass">修改密码</a> <a
 			href="javascript:void(0)" id="loginOut">安全退出</a></span> <span
 			style="padding-left: 10px; font-size: 16px;"><img

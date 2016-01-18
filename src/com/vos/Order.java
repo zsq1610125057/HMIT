@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Order {
 
+	private float money;
 	private int ordId;//订单id，主键
 	private int proId;//项目id
 	private String proName;	
@@ -14,7 +15,7 @@ public class Order {
 	private float costPrice;
 	private int supId;//供应商id
 	private String supName;
-	private String sellPrice;
+	private float sellPrice;
 	private String status;
 	private String payRemarks;
 	private String lastUpdateBy;
@@ -26,6 +27,33 @@ public class Order {
 	private float diff;
 	private String remarks;
 	private String ifWholeSale;
+	private String arrivalTime;
+	public float getMoney() {
+		return money;
+	}
+	public void setMoney(float money) {
+		this.money = money;
+	}
+	public String getArrivalTime() {
+		return arrivalTime;
+	}
+	public void setArrivalTime(String arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+	private float payables;
+	public float getPayables() {
+		return payables;
+	}
+	public void setPayables(float payables) {
+		this.payables = payables;
+	}
+	public String getInvId() {
+		return invId;
+	}
+	public void setInvId(String invId) {
+		this.invId = invId;
+	}
+	private String invId;
 	
 	public String getProName() {
 		return proName;
@@ -63,10 +91,10 @@ public class Order {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getSellPrice() {
+	public float getSellPrice() {
 		return sellPrice;
 	}
-	public void setSellPrice(String sellPrice) {
+	public void setSellPrice(float sellPrice) {
 		this.sellPrice = sellPrice;
 	}
 	public String getSupName() {

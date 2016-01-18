@@ -14,4 +14,5 @@
 	<sqlMap resource="com/vos/sqlMapXML/Customer.xml"/>
 	<sqlMap resource="com/vos/sqlMapXML/Supplier.xml"/>
 	<sqlMap resource="com/vos/sqlMapXML/Warehousemanagement.xml"/>
+	<sqlMap resource="com/vos/sqlMapXML/Paymenthistory.xml"/>
 </sqlMapConfig>	

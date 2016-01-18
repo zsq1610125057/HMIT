@@ -9,6 +9,7 @@ import com.vos.Invoice;
 import com.vos.Order;
 import com.vos.OrderVO;
 import com.vos.PayTypeVo;
+import com.vos.Paymenthistory;
 import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.Supplier;
@@ -42,4 +43,14 @@ public interface ProjectService {
 	public List<Project> getProjectAllNameList() throws SQLException;
 	//增加发票
 	public void addInvoice(Invoice invoice) throws SQLException;
+	//添加货到时间
+	public void updateOrderArrival(Order order, String action) throws SQLException;
+	 //增加订单付款表
+    public void addorderPay(Paymenthistory paymenthistory) throws SQLException;
+    //获得发票
+    public List<Invoice> getInvoiceList(int proId) throws SQLException;
+    //添加发票信息
+    public void updateorderofinv(Order order, String action)throws SQLException;
+    //获取付款详情
+    public List<Paymenthistory> getgetOrderHistory(int ordId)throws SQLException ;
 }

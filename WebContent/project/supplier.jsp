@@ -295,12 +295,11 @@
     }
 </script>
 </head>
-<body >
-	<form id="supplierTable">
-		<div id="customerDiv" data-options="region:'west',title:'供应商信息查询	'"
-			style="height: 120px; background: #F4F4F4; margin-top: 2px;"
-			class="easyui-tabs" border="false">
+<body class="easyui-layout">
+	
+    <div region="north" style="height: 120px; background: #F4F4F4;" class="easyui-tabs"  border="false">
 			<div title="供应商信息查询" fit="true" border='false'>
+				<form id="supplierTable">
 				<table id="supplierTable" class="supplierTable datagrid-toobar"
 					style="width: 100%; height: 100%">
 					<tr>
@@ -327,12 +326,12 @@
 							href="javascript:void(0);" onclick="clearSearch();">重置</a></td>
 					</tr>
 				</table>
+				</form>
 			</div>
 		</div>
-	</form>
-	<div>
-		<table id="dg" class="easyui-datagrid" style="height: 350px;"
-			title="Supplier">
+	
+	 <div id="g" region="center" style="margin-top: 3px;" >
+		<table id="dg" class="easyui-datagrid" style="height: 350px;" title="Customer">
 		</table>
 	</div>
 

@@ -52,6 +52,7 @@ import com.vos.JsonResult;
 import com.vos.Order;
 import com.vos.OrderVO;
 import com.vos.PayTypeVo;
+import com.vos.Paymenthistory;
 import com.vos.Payway;
 import com.vos.Project;
 import com.vos.ProjectTypeVo;
@@ -502,7 +503,7 @@ public class LoginController {
 		int firstRow = (pageNumber - 1) * pageSize;
 		try{
 			pageList = projectService.getOrderListByPager(order,firstRow, pageSize);
-			
+			//System.out.println("采购表"+pageList);
 			count = projectService.getOrderCount();
 			map.put("rows", pageList);
 			map.put("total", count);
@@ -525,11 +526,7 @@ public class LoginController {
 			rowData = URLDecoder.decode(rowData,"UTF-8");
 			Order order = (Order) JSONObject.toBean(JSONObject.fromObject(rowData), Order.class);
 			projectService.updateOrderStatus(order, action);
-			if(action.equals(HmitUtil.ORDER_STATUS_CONFIRMED)){
-			    Supplier su=supplierService.selectPaymentAmount(order.getSupId());
-				float cpma=su.getTotalPaymentAmount()+order.getCostPrice();
-			    supplierService.updatePaymentAmount(su.getSupId(), cpma);
-				}else if(action.equals(HmitUtil.ORDER_STATUS_ARRIVED)){
+			if(action.equals(HmitUtil.ORDER_STATUS_ARRIVED)){
 					Warehousemanagement ware=new Warehousemanagement();
 					ware.setStock(order.getEquNumber());
 					ware.setEquName(order.getEquName());
@@ -560,11 +557,69 @@ public class LoginController {
 			pw = response.getWriter();
 			rowData = URLDecoder.decode(rowData,"UTF-8");
 			Order order = (Order) JSONObject.toBean(JSONObject.fromObject(rowData), Order.class);
+			Paymenthistory paymenthistory=new Paymenthistory();
+			paymenthistory.setOrdId(order.getOrdId());
+			paymenthistory.setPaidDate(order.getPayDate());
+			paymenthistory.setPaidMoney(order.getMoney());
+			paymenthistory.setPayRemarks(order.getPayRemarks());
+			paymenthistory.setPayWay(order.getPayWay());
+			order.setPayables(order.getPayables()-order.getMoney());
+			projectService.addorderPay(paymenthistory);
 			projectService.updateOrderStatus1(order, action);
 			//System.out.println(order.getCostPrice());
 			Supplier su=supplierService.selectPaymentAmount(order.getSupId());
-			float cpma=su.getTotalPaymentAmount()-order.getCostPrice();
+			float cpma=su.getTotalPaymentAmount()-order.getMoney();
 		    supplierService.updatePaymentAmount(su.getSupId(), cpma);
+		    pw.print(messageSuc());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			pw.print(messageErr());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@RequestMapping("/updateOrderStatus2")
+	public void updateOrderStatus2(@RequestParam("data") String row,
+									HttpServletResponse response) {
+		PrintWriter pw = null;
+		try {
+			String[]arrData = row.split("=");
+			String rowData = arrData[0];
+			String action = arrData[1];
+			pw = response.getWriter();
+			rowData = URLDecoder.decode(rowData,"UTF-8");
+			Order order = (Order) JSONObject.toBean(JSONObject.fromObject(rowData), Order.class);
+			order.setPayables(order.getCostPrice());
+			projectService.updateOrderArrival(order,action);
+			Supplier su=supplierService.selectPaymentAmount(order.getSupId());
+			float cpma=su.getTotalPaymentAmount()+order.getCostPrice();
+		    supplierService.updatePaymentAmount(su.getSupId(), cpma);
+		    pw.print(messageSuc());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			pw.print(messageErr());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@RequestMapping("/updateorderofinv")
+	public void updateorderofinv(@RequestParam("data") String row,
+									HttpServletResponse response) {
+		PrintWriter pw = null;
+		try {
+			String[]arrData = row.split("=");
+			String rowData = arrData[0];
+			String action = arrData[1];
+			pw = response.getWriter();
+			rowData = URLDecoder.decode(rowData,"UTF-8");
+			Order order = (Order) JSONObject.toBean(JSONObject.fromObject(rowData), Order.class);			
+			projectService.updateorderofinv(order,action);
 		    pw.print(messageSuc());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -603,6 +658,7 @@ public class LoginController {
 		try {
 			//list = customerService.getAllCustomer();
 			pageList = supplierService.getAllSupplier(firstRow, pageSize,supSearchVO);
+			//System.out.println(pageList);
 			int count = supplierService.getSupplierCount(supSearchVO);
 			map.put("rows", pageList);
 			map.put("total", count);
@@ -750,4 +806,48 @@ public class LoginController {
 		}
 
 }
+//获取发票	
+		@RequestMapping("/getInvoiceList")
+		@ResponseBody
+		public void getInvoiceList(@RequestParam("proId") int proId,HttpServletResponse response) {
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			List<Invoice> list = new ArrayList<Invoice>();
+			try {
+				list =projectService.getInvoiceList(proId);
+				if (list != null && list.size() > 0) {
+					JSONArray json = JSONArray.fromObject(list);
+					pw.write(json.toString());	
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+//获取付款详情
+		@RequestMapping("/getOrderPayHistory")
+		@ResponseBody
+		public Map<String, Object> getOrderHistory(HttpServletResponse response,@ModelAttribute Paymenthistory paymenthistory) {
+			//System.out.println("customer______"+cusSearchVO.getEmpName());
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<Paymenthistory> pageList = new ArrayList<Paymenthistory>();
+			try {
+				
+				pageList = projectService.getgetOrderHistory(paymenthistory.getOrdId());			
+				map.put("rows", pageList);
+				return map;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				map.put("error", false);
+			}
+			return null;
+			
+		}
 }

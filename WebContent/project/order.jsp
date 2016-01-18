@@ -96,6 +96,9 @@ $(function (){
 		}
 	},
 	{
+		field: 'payables', title: '应付款', width: 80
+	},
+	{
 		field: 'proName', title: '项目名称', width: 80
 	},
 	{
@@ -108,6 +111,9 @@ $(function (){
 		}
 	},
 	{
+		field: 'invId', title: '进项发票号', width: 80
+	},
+	{
 		field: 'payRemarks', title: '付款到货备注', width: 80,
 		editor: {//设置其为可编辑
 		type: 'validatebox',
@@ -117,12 +123,12 @@ $(function (){
 		}			
 	},
 	{
-		field: 'status', title: '状态', width: 50
+		field: 'status', title: '状态', width: 60
 			
 	},{
 		title:'操作',
 		field:'id',
-		width:50,
+		width:80,
 		formatter:  function(value,row,index) {		
 
 			if (row.status == '<%=HmitUtil.ORDER_STATUS_NEW%>' || row.status == null) {	
@@ -131,11 +137,13 @@ $(function (){
 				return "<a href='javascript:void(0);' onclick='reiewOrder("+index+")'>审核</a> ";
 			} else if (row.status == '<%=HmitUtil.ORDER_STATUS_CONFIRMED%>') {
 				return "<a href='javascript:void(0);' onclick='confirmArrived("+index+")'>确认到货</a> ";
-			} else if (row.status == '<%=HmitUtil.ORDER_STATUS_ARRIVED%>') {
-				return "<a href='javascript:void(0);' onclick='confirmPay("+index+")'>确认付款</a> ";
-			} else if (row.status == '<%=HmitUtil.ORDER_STATUS_PAYED%>') {
+			} else if (row.invId == null && row.payables != 0 ) {
+				return "<a href='javascript:void(0);' onclick='confirmPay("+index+")'>确认付款</a><br><a href='javascript:void(0);' onclick='confirmInv("+index+")'>确认开票</a>  ";
+			} else if (row.invId == null && row.payables == 0 ) {
 				return "<a href='javascript:void(0);' onclick='confirmInv("+index+")'>确认开票</a> ";
-			} else {
+			}else if (row.invId != null && row.payables != 0 ) {
+				return "<a href='javascript:void(0);' onclick='confirmPay("+index+")'>确认付款</a> ";
+			}else {
 				return '<%=HmitUtil.ORDER_STATUS_INVED%>';
 				
 			}
@@ -202,7 +210,24 @@ $(function (){
 		text : "进项发票信息",
 		iconCls : "icon-print",
 		handler : function() {
-			 $('#inv').dialog("open").dialog('setTitle', '添加付款信息');
+			 $('#inv').dialog("open").dialog('setTitle', '添加发票信息');
+		}
+	},"-", 
+	{
+		text : "付款记录",
+		iconCls : "icon-print",
+		handler : function() {
+			var rows = $("#dg").datagrid('getSelections');
+			var row = $('#dg').datagrid("getSelected");
+			
+			if (rows.length < 1) {
+				$.messager.alert('操作提示', '请选择要修改的行', 'warning');
+			} else {
+				
+			
+			$('#dg1').datagrid('load', row);
+			$('#details').dialog("open").dialog('setTitle', '付款记录查询'); 
+			} 
 		}
 	}
 	          
@@ -263,6 +288,58 @@ $(function (){
 	      
 	      method : 'get',
 	  });
+	//加载表格
+	$('#dg1').datagrid(
+							{
+								loadMsg : '数据加载中请稍后',
+								
+								url : '<%=basePath%>getOrderPayHistory', //请求方法的地址
+				title : '',
+				nowrap : false, //文字自动换行
+				fitColumns : true, //列自适应
+				pagination : true, //底部显示分页工具栏
+				fit : true,
+				pageSize:10,
+				pageList: [10, 20, 30],
+				rownumbers : true, // 当true时显示行号 
+				singleSelect : true, // 只允许当前选择一行
+				iconCls : 'icon-save',
+				idField : 'id', //标识列
+				columns : [ [ {
+					field: 'pHId', title: '编号', width: 80,hidden : 'true'
+//		  			editor: {//设置其为可编辑
+//		  			type: 'validatebox',//设置编辑样式 自带样式有：text，textarea，checkbox，numberbox，validatebox，datebox，combobox，combotree 可自行扩展
+//		  			options: {}
+//		  			}    
+		 	 },{
+					title : '采购单号',
+					field : 'ordId',
+					editor : 'text',
+					align : 'center',
+					width : 50,
+					hidden : 'true'
+				}, {
+					title : '付款金额',
+					field : 'paidMoney',
+					editor : 'text',
+					align : 'center',
+					width : 50
+				}, {
+					title : '付款时间',
+					field : 'paidDate',
+					editor : 'text',
+					align : 'center',
+					width : 50
+				},{
+					title:'付款方式',
+					field:'pWName',
+					editor : 'text',
+					align : 'center',
+					width : 50
+				}
+				] ]
+			 
+			});
 	$("#dg").datagrid('hideColumn','ordId');//隐藏属性
 
 	$("#dg").datagrid('hideColumn','proId');
@@ -273,7 +350,14 @@ function editpay(index) {
     var row = $('#dg').datagrid("getSelected");
     if (row) {
         $('#dlg').dialog("open").dialog('setTitle', '添加付款信息');
+        //document.getElementById('money').max=20000;
+        
         $('#fm').form("load", row);
+        $("#money").numberbox({
+            max:row.payables,
+            value:row.payables
+        });
+      // var max= $('#payables').validatebox('getValues');
     }
 }
 //进阶确认
@@ -367,33 +451,17 @@ function reiewOrder(index) {
 }
 //确认到货
 function confirmArrived(index) {
-	$("#dg").datagrid('selectRow',index);
-	var row = $("#dg").datagrid('getSelected');
 	if (editFlag != undefined) {
 		$.messager.alert('操作提示', '您尚未保存', 'warning');
 		return;
-	}
-	var data = encodeURI(JSON.stringify(row),"UTF-8");
-	$.messager.defaults = { ok: "是", cancel: "否" };  
-	 $.messager.confirm("操作提示","请业务经理确认，是否继续?" , function (d) {  
-		 if(d) {
-	    		$.ajax({
-	    			url : '<%=basePath%>updateOrderStatus',
-	    			data : 'data=' + data + '=' + '<%=HmitUtil.ORDER_STATUS_ARRIVED%>',
-	    			dataType : 'json',
-	    			type : 'post',
-	    			success : function(r) {
-	    				if(r) {
-	    					$.messager.alert('操作提示', r.msg, r.result);
-	    					$("#dg").datagrid('reload');
-	    				}
-	    			},
-	    			error : function() {
-	    				$.messager.alert('操作提示', '服务器出错', 'error');
-	    			}	
-	    		}); 
-		 }
-	 });
+	}  
+	$("#dg").datagrid('selectRow',index);
+    var row = $('#dg').datagrid("getSelected");
+    if (row) {
+        $('#arrival').dialog("open").dialog('setTitle', '添加收获信息');
+        $('#arrival-fm').form("load", row);
+        //
+    }
 }
 //确认付款
 function confirmPay(index) {
@@ -403,34 +471,32 @@ function confirmPay(index) {
 	}  
 			 editpay(index);  
 }
+
 //确认开票
 function confirmInv(index) {
-	$("#dg").datagrid('selectRow',index);
-	var row = $("#dg").datagrid('getSelected');
 	if (editFlag != undefined) {
 		$.messager.alert('操作提示', '您尚未保存', 'warning');
 		return;
-	}
-	var data = encodeURI(JSON.stringify(row),"UTF-8");
-	 $.messager.confirm("操作提示","请业务员确认开票，是否继续?" , function (d) {  
-		 if(d) {
-	    		$.ajax({
-	    			url : '<%=basePath%>updateOrderStatus',
-	    			data : 'data=' + data + '=' + '<%=HmitUtil.ORDER_STATUS_INVED%>',
-	    			dataType : 'json',
-	    			type : 'post',
-	    			success : function(r) {
-	    				if(r) {
-	    					$.messager.alert('操作提示', r.msg, r.result);
-	    					$("#dg").datagrid('reload');
-	    				}
-	    			},
-	    			error : function() {
-	    				$.messager.alert('操作提示', '服务器出错', 'error');
-	    			}	
-	    		}); 
-		 }
-	 });
+	}  
+	$("#dg").datagrid('selectRow',index);
+    var row = $('#dg').datagrid("getSelected");
+    if (row) {
+    	$('#invId').combobox({   
+
+  	      url:'<%=basePath%>getInvoiceList?proId='+row.proId,
+
+  	      valueField:'invId',
+
+  	      textField:'invId',
+  	      
+  	      editable : false,
+  	      
+  	      method : 'get',
+  	  });
+        $('#orderofinv').dialog("open").dialog('setTitle', '添加发票');
+        $('#orderofinv').form("load", row);
+        //
+    }
 }
 function getSupplierList(url) {
 	var temp;
@@ -629,6 +695,51 @@ function saveInv() {
 			}	
 		}); 
 }
+
+//添加收获信息
+function saveArrival(){
+	 var data1 = sy.serializeObject($('#arrival-fm').form());
+	 var data = encodeURI(JSON.stringify(data1),"UTF-8"); 
+	 $.ajax({
+			url : '<%=basePath%>updateOrderStatus2',
+			data : 'data=' + data + '=' + '<%=HmitUtil.ORDER_STATUS_ARRIVED%>',
+			dataType : 'json',
+			type : 'post',
+			success : function(r) {
+				if(r) {
+					$.messager.alert('操作提示', r.msg, r.result);
+					$('#arrival').dialog("close");
+                 $('#dg').datagrid("load");
+				}
+			},
+			error : function() {
+				$.messager.alert('操作提示', '服务器出错', 'error');
+			}	
+		}); 
+	
+}
+//添加发票
+function updateorderofinv(){
+	 var data1 = sy.serializeObject($('#orderofinv-fm').form());
+	 var data = encodeURI(JSON.stringify(data1),"UTF-8"); 
+	 $.ajax({
+			url : '<%=basePath%>updateorderofinv',
+			data : 'data=' + data + '=' + '<%=HmitUtil.ORDER_STATUS_INVED%>',
+			dataType : 'json',
+			type : 'post',
+			success : function(r) {
+				if(r) {
+					$.messager.alert('操作提示', r.msg, r.result);
+					$('#orderofinv').dialog("close");
+                 $('#dg').datagrid("load");
+				}
+			},
+			error : function() {
+				$.messager.alert('操作提示', '服务器出错', 'error');
+			}	
+		}); 
+	
+}
 //清空
 function clearSearch(){
 	//$('#dg').datagrid("load", {});
@@ -693,6 +804,15 @@ function searchOrder() {
 					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
 			</div>
 			<div class="fitem">
+				<label >应　付　金　额:</label> <input name="payables"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem" >
+				<label >付　款　金　额:</label> <input id="money" name="money" type="text" min="1" max=""
+							precision="2" required="true" missingMessage="非法金额"
+							class="easyui-numberbox" />
+			</div>
+			<div class="fitem">
 				<label>付　款　时　间:</label> <input id="payDate" type="text"
 							class="easyui-datebox" name="payDate"
 							style="width: 145px;" required="true" editable="false" />
@@ -732,8 +852,8 @@ function searchOrder() {
 					class="easyui-validatebox" style="width: 140px;" required="true" />
 			</div>
 			<div class="fitem">
-				<label>开票日期:</label> <input id="invDate" type="text"
-							class="easyui-datebox" name="invDate"
+				<label>开票日期:</label> <input id="arrivalTime" type="text"
+							class="easyui-datebox" name="arrivalTime"
 							style="width: 145px;" required="true" editable="false" />
 			</div>
 			<div class="fitem">
@@ -753,7 +873,87 @@ function searchOrder() {
 			href="javascript:void(0)" class="easyui-linkbutton"
 			onclick="javascript:$('#inv').dialog('close')" iconcls="icon-cancel">取消</a>
 	</div>
-
-
+    <div id="arrival" class="easyui-dialog"
+		style="width: 320px; height: 270px; padding: 10px 20px;" closed="true"
+		buttons="#arrival-buttons">
+		<form id="arrival-fm" method="post">
+			<div class="fitem">
+				<label >采　购　单　号:</label> <input name="ordId"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem" style="display: none;">
+				<label >生　产　商　号:</label> <input name="supId"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem">
+				<label >项　目　名　称:</label> <input name="proName"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem">
+				<label >进　货　总　价:</label> <input name="costPrice"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>			
+			<div class="fitem">
+				<label>收　货　时　间:</label> <input id="arrivalTime" type="text"
+							class="easyui-datebox" name="arrivalTime"
+							style="width: 145px;" required="true" editable="false" />
+			</div>
+			<div class="fitem">
+				<label ">付款，到货备注:</label> <input name="payRemarks"
+					class="easyui-validatebox" style="width: 140px;" required="true" />
+			</div>		
+		</form>
+	</div>
+	<div id="arrival-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="saveArrival();" iconcls="icon-save">保存</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="javascript:$('#arrival').dialog('close')" iconcls="icon-cancel">取消</a>
+	</div>
+    <div id="orderofinv" class="easyui-dialog"
+		style="width: 320px; height: 270px; padding: 10px 20px;" closed="true"
+		buttons="#orderofinv-buttons">
+		<form id="orderofinv-fm" method="post">
+			<div class="fitem">
+				<label >采　购　单　号:</label> <input name="ordId"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem" style="display: none;">
+				<label >项   目     编    号:</label> <input name="proId"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem">
+				<label >项　目　名　称:</label> <input name="proName"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem">
+				<label >进　货　总　价:</label> <input name="costPrice"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
+			<div class="fitem">
+				<label>发　票　单　号:</label> <input id="invId" type="text"
+				style="width: 145px;" class="easyui-combobox" name="invId" editable="false" />
+			</div>				
+		</form>
+	</div>
+	<div id="orderofinv-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="updateorderofinv();" iconcls="icon-save">保存</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="javascript:$('#orderofinv').dialog('close')" iconcls="icon-cancel">取消</a>
+	</div>
+    <div id="details" class="easyui-dialog"
+		style="width: 420px; height: 300px; padding: 10px 20px;" closed="true"
+		buttons="#details-buttons">
+		
+		<table id="dg1" class="easyui-datagrid" style="height: 200px;" >
+		</table>
+	
+	</div>
+	<div id="details-buttons">
+		 <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="javascript:$('#details').dialog('close')" iconcls="icon-cancel">取消</a>
+	</div>
 </body>
 </html>

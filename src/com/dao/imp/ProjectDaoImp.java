@@ -17,6 +17,7 @@ import com.vos.Invoice;
 import com.vos.Order;
 import com.vos.OrderVO;
 import com.vos.PayTypeVo;
+import com.vos.Paymenthistory;
 import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.Supplier;
@@ -188,6 +189,56 @@ public class ProjectDaoImp implements ProjectDao {
 	public List<Project> getProjectAllNameList() throws SQLException {
 		List<Project> list = null;
 		list=sqlMapClient.queryForList("getProjectAllNameList");
+		return list;
+	}
+	@Override
+	public void updateOrderArrival(Order order, String action)
+			throws SQLException {
+		try{
+			order.setAction(action);
+			order.setLastUpdateBy(HmitUtil.CURRENT_USER);
+			//System.out.println(order);
+			sqlMapClient.update("updateOrderArrival", order);
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	@Override
+	public void addorderPay(Paymenthistory paymenthistory) throws SQLException {
+		// TODO Auto-generated method stub
+		sqlMapClient.insert("addorderPay", paymenthistory);
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Invoice> getInvoiceList(int proId) throws SQLException {
+		List<Invoice> list = null;
+		Map<String,Object> map = new HashMap<String,Object>();
+		//int endRow = pageSize+firstRow;
+		map.put("proId", proId);
+		list = sqlMapClient.queryForList("getInvoiceList",map);
+		return list;
+	}
+	@Override
+	public void updateorderofinv(Order order, String action)throws SQLException {
+		try{
+			order.setAction(action);
+			order.setLastUpdateBy(HmitUtil.CURRENT_USER);
+			sqlMapClient.update("updateorderofinv", order);
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+	@Override
+	public List<Paymenthistory> getgetOrderHistory(int ordId)
+			throws SQLException {
+		List<Paymenthistory> list = null;
+		Map<String,Object> map = new HashMap<String,Object>();
+		//int endRow = pageSize+firstRow;
+		map.put("ordId", ordId);
+		list = sqlMapClient.queryForList("getOrderHistory",map);
 		return list;
 	}
 }

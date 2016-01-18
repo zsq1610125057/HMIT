@@ -4,6 +4,11 @@ public class Invoice {
 private String invId;
 private float invMoney;
 private String invContent;
+private String invType;
+private String invDate;
+private String invRemarks;
+private int proId;
+
 public String getInvId() {
 	return invId;
 }
@@ -46,9 +51,6 @@ public int getProId() {
 public void setProId(int proId) {
 	this.proId = proId;
 }
-private String invType;
-private String invDate;
-private String invRemarks;
-private int proId;
+
 
 }

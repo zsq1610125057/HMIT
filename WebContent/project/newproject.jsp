@@ -340,13 +340,13 @@ function deleteOrder(index) {
 // 	return data;
 // }
 </script>
-<body >
-	<form id="customerForm">
-		<div data-options="region:'north',title:'项目'"
-			style="height: 100px; background: #F4F4F4;" class="easyui-tabs"
-			border="false">
+<body class="easyui-layout">
+	
+	<div region="north" style="height: 90px; background: #F4F4F4;" class="easyui-tabs"  border="false">
 			<div title="客户">
-				<table>
+			<form id="customerForm" >
+				<table id="customerForm" class="customerTable datagrid-toobar"
+					style="width: 100%; height: 100%">
 					<tr>
 						<th>客户公司:</th>
 						<td><input id="customerComp" type="text"
@@ -377,19 +377,16 @@ function deleteOrder(index) {
 							-->
 					</tr>
 
-				</table>
-
+			</table>
+</form>
 
 			</div>
 		</div>
-	</form>
-	<form id="projectForm">
-		<div id="projectDiv" data-options="region:'center',title:'项目'"
-			style="height: 115px; background: #F4F4F4; margin-top: 2px;"
-			class="easyui-tabs" border="false">
-
-			<div title="项目">
-				<table>
+			
+    <div region="center" style="height: 110px; background: #F4F4F4;" class="easyui-tabs"  border="false">
+         <div title="项目">
+			<form id="projectForm">
+				<table id="projectForm" class="customerTable datagrid-toobar">
 					<tr>
 						<th>项目名称:</th>
 						<td><input id="proName" type="text"
@@ -439,13 +436,19 @@ function deleteOrder(index) {
 							style="color: red; margin-left: 2px;">*</span></td>
 
 					</tr>
+					<!--  
 					<tr>
 
 						<td colspan="2"><input type="checkbox" value="0"
 							id="ifMigAgent" name="ifMigAgent" /><b>过单</b></td>
 					</tr>
+					-->
 				</table>
+			</form>
 			</div>
+         
+			
+			
 			<!-- 		<div title="合同"> -->
 			<!-- 			<table> -->
 
@@ -458,21 +461,22 @@ function deleteOrder(index) {
 
 			<!-- 			</table> -->
 			<!-- 		</div> -->
+		<!--  
 			<div title="过单">
 				<table>
 
 
 				</table>
 			</div>
-		</div>
-	</form>
-	<form id="orderForm">
-		<div id="orderDiv"
-			data-options="region:'west',title:'采购单'，tools:'#tab-tools'"
-			style="height: 150px; background: #F4F4F4; margin-top: 2px;"
-			class="easyui-tabs" border="false">
+			-->
+</div>
+	
+	<div div region="south" style="height: 370px; background: #F4F4F4;" class="easyui-tabs"  border="false">
+	
 			<div title="设备信息" fit="true" border='false'>
-				<table id="orderTable">
+			<form id="orderForm">
+				<table id="orderTable" class="customerTable datagrid-toobar"
+					style="width: 100%; height: 100%">
 					<tr>
 						<th>设备名称:</th>
 						<td><input id="equName" type="text"
@@ -531,13 +535,13 @@ function deleteOrder(index) {
 							href="javascript:void(0);" onclick="clear();">重置</a></td>
 					</tr>
 				</table>
-			</div>
+				
 
 
-		</div>
-		<div id="dg" class="easyui-datagrid" style="height: 180px;">
-			<img alt="" src="">
-		</div>
+		<div id="g" region="center" style="margin-top: 3px;" >
+		<table id="dg" class="easyui-datagrid" style="height: 180px;" title="Customer">
+		</table>
+	</div>
 		<div id="saveDive" align="center" style="margin-top: 10px;">
 
 			<a id="saveProjectBtn" class="easyui-linkbutton" icon="icon-save"
@@ -548,5 +552,10 @@ function deleteOrder(index) {
 
 		</div>
 	</form>
+			</div>
+	</div>
+		
+			
+		
 </body>
 </html>

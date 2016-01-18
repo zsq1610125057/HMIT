@@ -294,14 +294,13 @@
     }
 </script>
 </head>
-<body>
-	<form id="customerTable">
-		<div id="customerDiv" data-options="region:'west',title:'客户信息查询	'"
-			style="height: 120px; background: #F4F4F4; margin-top: 2px;"
-			class="easyui-tabs" border="false">
-			<div title="客户信息查询" fit="true" border='false'>
+<body class="easyui-layout">
+	
+		<div region="north" style="height: 120px; background: #F4F4F4;" class="easyui-tabs"  border="false">
+			<div title="客户信息查询" >
+			<form id="customerTable">
 				<table id="customerTable" class="customerTable datagrid-toobar"
-					style="width: 100%; height: 100%">
+					style="width: 90%; height: 100%">
 					<tr>
 						<th>客户名称:</th>
 						<td><input id="compName" type="text" class="easyui-validatebox textbox" name="compName"/></td>
@@ -314,15 +313,16 @@
 						<th>地址:</th>
 						<td><input id="address" class="easyui-validatebox"
 							type="text" name="address"/></td>
+						<th>经手人:</th>
+						<td><input id="empName" type="text" class="easyui-combobox"
+							name="empName" editable="false" /></td>
 						<th>应收款:</th>
 						<td><input id="beginMoney" class="easyui-validatebox"
 							type="text" name="beginMoney"/></td>
 							
 							<td>至<input id="endMoney" class="easyui-validatebox"
 							type="text" name="endMoney"/></td>
-						<th>经手人:</th>
-						<td><input id="empName" type="text" class="easyui-combobox"
-							name="empName" editable="false" /></td>
+						
 					</tr>
 					<tr>
 						<td colspan="2"><a class="easyui-linkbutton"
@@ -332,12 +332,12 @@
 							href="javascript:void(0);" onclick="clearSearch();">重置</a></td>
 					</tr>
 				</table>
+				</form>
 			</div>
 		</div>
-	</form>
-	<div>
-		<table id="dg" class="easyui-datagrid" style="height: 350px;"
-			title="Customer">
+
+    <div id="g" region="center" style="margin-top: 3px;" >
+		<table id="dg" class="easyui-datagrid" style="height: 350px;" title="Customer">
 		</table>
 	</div>
 

@@ -14,7 +14,7 @@ public class HmitUtil {
 	
 	public static final String ORDER_STATUS_PAYED = "已付款";
 	
-	public static final String ORDER_STATUS_INVED = "已开票";
+	public static final String ORDER_STATUS_INVED = "已完成";
 	//public static final String ORDER_STATUS_INVED = "asd";
 	public static final String TITLE_BUSINESS_REP = "业务代表";
 	

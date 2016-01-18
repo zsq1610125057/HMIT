@@ -14,6 +14,7 @@ import com.vos.Invoice;
 import com.vos.Order;
 import com.vos.OrderVO;
 import com.vos.PayTypeVo;
+import com.vos.Paymenthistory;
 import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.Supplier;
@@ -59,8 +60,13 @@ public class ProjectServiceImp implements ProjectService {
 		try{
 			
 			int pid = projectDao.saveNewProject(project);
+			System.out.println(pid);
 			for (Order order  : list) {
 				order.setProId(pid);
+				System.out.println("是否批发"+order.getIfWholeSale());
+				if(order.getIfWholeSale()==null){
+					order.setIfWholeSale("0");
+				}
 				//order.setSupId(Integer.parseInt(order.getSupName().split("-")[0]));
 				projectDao.saveOrder(order);
 			}
@@ -112,5 +118,33 @@ public class ProjectServiceImp implements ProjectService {
 	public List<Project> getProjectAllNameList() throws SQLException {
 		// TODO Auto-generated method stub
 		return projectDao.getProjectAllNameList();
+	}
+	@Override
+	public void updateOrderArrival(Order order, String action)
+			throws SQLException {
+		projectDao.updateOrderArrival(order,action);
+		
+	}
+	@Override
+	public void addorderPay(Paymenthistory paymenthistory) throws SQLException {
+		// TODO Auto-generated method stub
+		projectDao.addorderPay(paymenthistory);
+	}
+	@Override
+	public List<Invoice> getInvoiceList(int proId) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getInvoiceList(proId);
+	}
+	@Override
+	public void updateorderofinv(Order order, String action)
+			throws SQLException {
+		projectDao.updateorderofinv(order, action);
+		
+	}
+	@Override
+	public List<Paymenthistory> getgetOrderHistory(int ordId)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getgetOrderHistory(ordId);
 	}
 }

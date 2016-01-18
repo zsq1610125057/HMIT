@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+						"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+<insert id="addorderPay" parameterClass="com.vos.Paymenthistory">
+<![CDATA[
+insert into paymenthistory(ordId,paidMoney,paidDate,payRemarks,pWName) values(#ordId#,#paidMoney#,str_to_date(#paidDate#,'%m/%d/%Y'),#payRemarks#,#payWay#) 
+  ]]>
+  
+</insert>
+<insert id="addpro" parameterClass="com.vos.Paymenthistory">
+<![CDATA[
+  insert into paymenthistory(proId,paidMoney,paidDate,payRemarks,remainingSum) values(#proId#,#paidMoney#,str_to_date(#paidDate#,'%m/%d/%Y'),#payRemarks#,#remainingSum#) 
+  ]]>
+</insert>
+<select id="getOrderHistory" resultClass="com.vos.Paymenthistory" parameterClass="java.util.Map">
+ <![CDATA[
+ select pHId,ordId,paidMoney,paidDate,pWName from paymenthistory where ordId =#ordId#
+   ]]>
+</select>
+</sqlMap>

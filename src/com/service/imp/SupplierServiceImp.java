@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import com.dao.supplierDao;
 import com.service.SupplierService;
+import com.vos.Order;
 import com.vos.SupSearchVO;
 import com.vos.Supplier;
 
@@ -54,4 +55,8 @@ public class SupplierServiceImp implements SupplierService {
 		supplierDao.updatePaymentAmount(supId, cpma);
 	}
 
+	@Override
+	public List<Order> getPayInfoList(int supId) throws SQLException {
+		return supplierDao.getPayInfoList(supId);
+	}
 }

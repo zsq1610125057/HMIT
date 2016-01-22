@@ -119,7 +119,16 @@
 				editor : 'text',
 				align : 'center',
 				width : 50
-			}, 
+			},
+			{	
+				title:'操作',
+			    field:'id',
+			    width:50,
+			    formatter:  function(value,row,index) {		
+				return "<a href='javascript:void(0);' onclick='editpay("+index+")'>付款详情</a> ";
+			}
+		}
+						
 			] ],
 			toolbar : [ {
 				id : 'btnAdd',
@@ -185,7 +194,19 @@
 	    return o;
 	};
 	
-	
+	function editpay(index) {
+		//$("#dg").datagrid('selectRow',index);
+	    //var row = $('#dg').datagrid("getSelected");
+	    //if (row) {
+	        $('#inv').dialog("open").dialog('setTitle', '付款详细信息');
+	     //   $('#dg1').form("clear"); 
+	        $("#dg").datagrid('selectRow',index);
+	        var row = $('#dg').datagrid("getSelected");
+	   	    $('#dg1').datagrid('load', row);
+	    //}
+	    
+		 
+	}
 	function searchSupplier() {
 		var data1 = sy.serializeObject($('#supplierTable').form());
 		 var data = encodeURI(JSON.stringify(data1),"UTF-8");
@@ -369,6 +390,64 @@
 			href="javascript:void(0)" class="easyui-linkbutton"
 			onclick="javascript:$('#dlg').dialog('close')" iconcls="icon-cancel">取消</a>
 	</div>
+<div id="inv" class="easyui-dialog"
+		style="width:420px; height:370px; padding: 10px 20px;" closed="true"
+		buttons="#inv-buttons">
+		<div style="width:320px; height:270px; padding: 10px 20px;">
+		<table id="dg1" class="easyui-datagrid" style="height:300px;"
+			title="">
+		</table>
+		
+	</div>
+		<script type="text/javascript">
+			$('#dg1').datagrid({    
+				url: '<%=basePath%>getPayInfo', 
+        	//title : '供应商信息',
+			nowrap : false, //文字自动换行
+			fitColumns : true, //列自适应
+			pagination : true, //底部显示分页工具栏
+			fit : true,
+			pageSize:10,
+			pageList:[3,5,10],
+			rownumbers : true, // 当true时显示行号 
+			singleSelect : true, // 只允许当前选择一行	
+			iconCls : 'icon-save',
+			idField : 'id', //标识列 
+			columns : [ [ {
+				title : '设备名称',
+				field : 'equName',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '设备数量',
+				field : 'equNumber',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '进货总价',
+				field : 'costPrice',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '应付款',
+				field : 'payables',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}
+			] ]
+});
 
+			</script>
+
+		<div id="inv-buttons">
+ <a href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="javascript:$('#inv').dialog('close')" iconcls="icon-cancel">取消</a>
+	</div>
+	
+	</div>
 </body>
 </html>

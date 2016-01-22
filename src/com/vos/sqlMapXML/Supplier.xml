@@ -38,6 +38,11 @@
 	
 		
 	</select>
+		<select id="getPayInfoList" resultClass="com.vos.Order">
+	<![CDATA[
+		select equName ,equNumber,costPrice,payables  from purchaseorder where supId=#supId# and payables>0
+	]]>
+	</select>
     <insert id="addSupplier" parameterClass="com.vos.Supplier">
 	<![CDATA[				  
 			insert into supplier(supName,contact,address,contactPersonName,empId) values(#supName#,#contact#,#address#,#contactPersonName#,#empId#)

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.dao.supplierDao;
 import com.ibatis.sqlmap.client.SqlMapClient;
+import com.vos.Order;
 import com.vos.SupSearchVO;
 import com.vos.Supplier;
 
@@ -45,6 +46,18 @@ public class supplierDaoImp implements supplierDao {
 		// TODO Auto-generated method stub
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Order> getPayInfoList(int supId) throws SQLException {
+		// TODO Auto-generated method stub
+				try {
+					return sqlMapClient.queryForList("getPayInfoList",supId);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
 	@Override
 	public int getSupplierCount(SupSearchVO supSearchVO) throws SQLException {
 		// TODO Auto-generated method stub

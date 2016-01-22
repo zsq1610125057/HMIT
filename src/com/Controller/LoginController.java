@@ -195,6 +195,29 @@ public class LoginController {
 		}
 		
 	}
+	@RequestMapping("/getPayInfo")
+	public void getPayInfo(HttpServletResponse response,@ModelAttribute Supplier supplier){
+		PrintWriter pw = null;
+System.out.println("11"+supplier.getSupId());
+		try {
+			pw = response.getWriter();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		List<Order> list = new ArrayList<Order>();
+		try {
+			list = supplierService.getPayInfoList(supplier.getSupId());
+			if (list != null && list.size() > 0) {
+				JSONArray json = JSONArray.fromObject(list);
+				pw.write(json.toString());	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	@RequestMapping("/getProjectNameList")
 	public void getProjectNameList(HttpServletResponse response) {
 		PrintWriter pw = null;

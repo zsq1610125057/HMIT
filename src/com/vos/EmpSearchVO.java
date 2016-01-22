@@ -6,6 +6,14 @@ public class EmpSearchVO {
 	private String newpassword;
 	private String roleId;
 	private String title;
+	private String RoleType;
+	
+	public String getRoleType() {
+		return RoleType;
+	}
+	public void setRoleType(String roleType) {
+		RoleType = roleType;
+	}
 	public String getRoleId() {
 		return roleId;
 	}

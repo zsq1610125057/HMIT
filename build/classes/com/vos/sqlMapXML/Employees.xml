@@ -16,16 +16,61 @@
 	
 		
 	</select>
+	<select id="getAllEmployee" resultClass="com.vos.Employees" parameterClass="java.util.Map">
+	<![CDATA[
+		select empId,empName,password,regDate,lastLoginDate,email,contact,loginName,roleId,title from employees
+]]>
+		<dynamic prepend="WHERE">
+			 <isNotEmpty prepend="AND" property="title">       
+                  <![CDATA[empId=#title#]]>  
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="RoleType">            
+                  <![CDATA[RoleId=#RoleType#]]>       
+            </isNotEmpty>        
+		</dynamic>		
+		limit #firstRow#,#pageSize#
+	</select>
 	
+	<select id="getEmployeeCount" resultClass="java.lang.Integer" parameterClass="com.vos.EmpSearchVO">
+	<![CDATA[
+		select count(*) from employees 
+		]]>		
+	</select>
 	<select id="queryById" parameterClass="com.vos.Employees" resultClass="com.vos.Employees">  
 	<![CDATA[
 		 select * from employees where loginName=#loginName# and password=#password#
 	]]>
 	</select>
-    
+    	<select id="getRoleTypeList" resultClass="com.vos.EmployeesVO">
+	<![CDATA[
+		select roleId as id,RoleType as name from userrole
+	]]>
+	</select>
     <update id="editEmployees" parameterClass="java.util.Map">
 		<![CDATA[
 			 update employees set password=#newpassword# where loginName=#loginName# and password=#password#
 		]]>
 	</update>
+	
+	<select id="gettitleList" resultClass="com.vos.Employees">
+	<![CDATA[
+		select empId ,title from employees
+	]]>
+	</select>
+		<insert id="addEmployee" parameterClass="com.vos.Employees">
+	<![CDATA[				  
+			insert into employees(empName,email,contact,loginName,roleId,title,password,regdate,lastLoginDate) values(#empName#,#email#,#contact#,#loginName#,#roleId#,#title#,#password#,str_to_date(now(),'%Y-%m-%d %H:%i:%s'),str_to_date(now(),'%Y-%m-%d %H:%i:%s'))
+			]]>
+	</insert> 
+		<update id="editEmployee" parameterClass="com.vos.Employees">
+		<![CDATA[
+			update employees set empName=#empName#,email=#email#,contact=#contact#,
+			loginName=#loginName#,roleId=#roleId#,title=#title# where empId = #empId#
+		]]>
+	</update>
+		<delete id="deleteEmployee" parameterClass="java.lang.Integer">
+		<![CDATA[
+			delete from employees where empId = #empId#
+		]]>
+		</delete>
 </sqlMap>

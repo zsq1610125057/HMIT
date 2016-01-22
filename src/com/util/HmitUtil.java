@@ -5,6 +5,7 @@ public class HmitUtil {
 	public static String CURRENT_USER;
 	public static String CURRENT_PASSWORD;
 	public static final String ORDER_STATUS_NEW = "已立项";
+	public static final String ORDER_STATUS_COMPLETION = "已验收";
 	//public static final String ORDER_STATUS_NEW = "123456";
 	public static final String ORDER_STATUS_ORDER = "已询价";
 	

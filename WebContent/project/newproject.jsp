@@ -143,7 +143,7 @@
 
 		      url:'<%=basePath%>getProBrokeragList',
 
-		      valueField:'empId',
+		      valueField:'empName',
 
 		      textField:'empName',
 		      
@@ -340,9 +340,9 @@ function deleteOrder(index) {
 // 	return data;
 // }
 </script>
-<body class="easyui-layout">
+<body class="easyui-layout" fit="true">
 	
-	<div region="north" style="height: 90px; background: #F4F4F4;" class="easyui-tabs"  border="false">
+	<div region="north"  style="height: 90px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
 			<div title="客户">
 			<form id="customerForm" >
 				<table id="customerForm" class="customerTable datagrid-toobar"
@@ -383,7 +383,7 @@ function deleteOrder(index) {
 			</div>
 		</div>
 			
-    <div region="center" style="height: 110px; background: #F4F4F4;" class="easyui-tabs"  border="false">
+    <div region="center"  style="height: 120px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
          <div title="项目">
 			<form id="projectForm">
 				<table id="projectForm" class="customerTable datagrid-toobar">
@@ -471,12 +471,12 @@ function deleteOrder(index) {
 			-->
 </div>
 	
-	<div div region="south" style="height: 370px; background: #F4F4F4;" class="easyui-tabs"  border="false">
+	<div  region="south"  style=" height: 360px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
 	
 			<div title="设备信息" fit="true" border='false'>
 			<form id="orderForm">
 				<table id="orderTable" class="customerTable datagrid-toobar"
-					style="width: 100%; height: 100%">
+					style="width: 100%; height: 90%">
 					<tr>
 						<th>设备名称:</th>
 						<td><input id="equName" type="text"
@@ -539,7 +539,7 @@ function deleteOrder(index) {
 
 
 		<div id="g" region="center" style="margin-top: 3px;" >
-		<table id="dg" class="easyui-datagrid" style="height: 180px;" title="Customer">
+		<table id="dg" class="easyui-datagrid" style="height: 170px;" title="Customer">
 		</table>
 	</div>
 		<div id="saveDive" align="center" style="margin-top: 10px;">

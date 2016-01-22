@@ -8,7 +8,29 @@
 		select cusid,comname as compName,address,contact,cusname as cusName from customer 
 	]]>
 	</select>
-	
+	<select id="getProject" resultClass="com.vos.Project" parameterClass="com.vos.ProSearchVO">
+	  <![CDATA[
+	  select * from project 
+	  ]]>
+	  <dynamic prepend="WHERE">      
+                 <isNotEmpty prepend="AND" property="status">       
+                     <![CDATA[ status =#status#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="pTName">       
+                     <![CDATA[ pTName =#pTName#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="proBrokerage">       
+                     <![CDATA[ proBrokerage =#proBrokerage#]]>    
+                 </isNotEmpty> 
+                   <isNotEmpty prepend="AND" property="cusId">       
+                     <![CDATA[ cusId =#cusId#]]>    
+                 </isNotEmpty>         
+		 </dynamic>	
+		limit #firstRow#,#pageSize#
+	</select>
+	<select id="getProjectCount" resultClass="java.lang.Integer" >
+	  select count(*) from project 
+	</select>
 	<select id="getProjectTypeList" resultClass="com.vos.ProjectTypeVo">
 	<![CDATA[
 		select ptid as id,ptname as name from projecttype
@@ -149,4 +171,24 @@
 		update purchaseOrder set wMId=#wMId#,difference=#difference# where  ordid = #ordId#
 	]]>
 	</update>
+	<update id="updateProjectStatus" parameterClass="java.util.Map">
+	<![CDATA[
+		update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),status=#action# where  proId = #id#
+	]]>
+	</update>
+	<insert id="addschedule" parameterClass="com.vos.Schedule" >
+	<![CDATA[
+	insert  into proschedule(proId,addPeople,addDate,schedule) values (#proId#,#addPeople#,str_to_date(now(),'%Y-%m-%d %H:%i:%s'),#schedule#)
+	]]>
+	</insert>
+	<select id="getProSchedule" parameterClass="java.util.Map" resultClass="com.vos.Schedule">
+	<![CDATA[
+	select addPeople,addDate,schedule from proschedule where proId=#proId#
+	]]>
+	</select>
+	<select id="getProScheduleCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	<![CDATA[
+	select count(*) from proschedule where proId=#proId#
+	]]>
+	</select>
 </sqlMap>

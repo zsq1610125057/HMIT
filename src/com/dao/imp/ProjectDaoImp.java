@@ -18,8 +18,10 @@ import com.vos.Order;
 import com.vos.OrderVO;
 import com.vos.PayTypeVo;
 import com.vos.Paymenthistory;
+import com.vos.ProSearchVO;
 import com.vos.Project;
 import com.vos.ProjectTypeVo;
+import com.vos.Schedule;
 import com.vos.Supplier;
 
 public class ProjectDaoImp implements ProjectDao {
@@ -165,7 +167,16 @@ public class ProjectDaoImp implements ProjectDao {
 	public void updateOrderStatus1(Order order, String action)
 			throws SQLException {
 		try{
-			order.setAction(action);
+			if(order.getPayables()==0 && order.getInvId()!=null){
+				order.setAction("已完成");
+			}else if(order.getPayables()==0 && order.getInvId()==null){
+				order.setAction("已付款未开票");
+			}else if(order.getPayables()!=0 && order.getInvId()==null){
+				order.setAction("未付清未开票");
+			}else{
+				order.setAction("未付清已开票");
+			}
+			
 			order.setLastUpdateBy(HmitUtil.CURRENT_USER);
 			sqlMapClient.update("updateOrderSupInfo1", order);
 		}catch(SQLException e) {
@@ -195,7 +206,9 @@ public class ProjectDaoImp implements ProjectDao {
 	public void updateOrderArrival(Order order, String action)
 			throws SQLException {
 		try{
-			order.setAction(action);
+			
+				order.setAction(action);
+		
 			order.setLastUpdateBy(HmitUtil.CURRENT_USER);
 			//System.out.println(order);
 			sqlMapClient.update("updateOrderArrival", order);
@@ -222,7 +235,15 @@ public class ProjectDaoImp implements ProjectDao {
 	@Override
 	public void updateorderofinv(Order order, String action)throws SQLException {
 		try{
-			order.setAction(action);
+			if(order.getPayables()==0 && order.getInvId()!=null){
+				order.setAction("已完成");
+			}else if(order.getPayables()==0 && order.getInvId()==null){
+				order.setAction("已付款未开票");
+			}else if(order.getPayables()!=0 && order.getInvId()==null){
+				order.setAction("未付清未开票");
+			}else{
+				order.setAction("未付清已开票");
+			}
 			order.setLastUpdateBy(HmitUtil.CURRENT_USER);
 			sqlMapClient.update("updateorderofinv", order);
 		}catch(SQLException e) {
@@ -231,6 +252,7 @@ public class ProjectDaoImp implements ProjectDao {
 		}
 		
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Paymenthistory> getgetOrderHistory(int ordId)
 			throws SQLException {
@@ -240,5 +262,61 @@ public class ProjectDaoImp implements ProjectDao {
 		map.put("ordId", ordId);
 		list = sqlMapClient.queryForList("getOrderHistory",map);
 		return list;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Project> getProject(int firstRow, Integer pageSize,
+			ProSearchVO proSearchVO) throws SQLException {
+		try{
+			proSearchVO.setFirstRow(firstRow);
+			proSearchVO.setPageSize(pageSize);
+			List<Project> list = new ArrayList<Project>();		
+			list = sqlMapClient.queryForList("getProject",proSearchVO);
+			return list;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	@Override
+	public int getProjectCount(ProSearchVO proSearchVO) throws SQLException {
+		int in=(Integer) sqlMapClient.queryForObject("getProjectCount",proSearchVO);
+		return in;
+	}
+	@Override
+	public void updateProjectStatus(int id, String action) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("action",action);
+		map.put("lastUpdateBy", HmitUtil.CURRENT_USER);
+		sqlMapClient.update("updateProjectStatus", map);
+	}
+	@Override
+	public void addSchedule(Schedule schedule) throws SQLException {
+		schedule.setAddPeople(HmitUtil.CURRENT_USER);
+		sqlMapClient.insert("addschedule", schedule);
+		
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Schedule> getProSchedule(int firstRow, Integer pageSize,int proId)
+			throws SQLException {
+		List<Schedule> list = null;
+		Map<String,Object> map = new HashMap<String,Object>();
+		//int endRow = pageSize+firstRow;
+		map.put("firstRow", firstRow);
+		map.put("pageSize", pageSize);
+		map.put("proId", proId);
+		list = sqlMapClient.queryForList("getProSchedule",map);
+		return list;
+	}
+	@Override
+	public int getProScheduleCount(int proId) throws SQLException {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("proId", proId);
+		int in=(Integer) sqlMapClient.queryForObject("getProScheduleCount",map);
+		return in;
 	}
 }

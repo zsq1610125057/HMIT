@@ -30,6 +30,7 @@ $(function (){
 	//toolbar设置表格顶部的工具栏，以数组形式设置
 	striped : true,
 	nowrap : false,
+	fit : true,
 	idField: 'id', //标识列，一般设为id，可能会区分大小写，大家注意一下
 	loadMsg: "正在努力为您加载数据", //加载数据时向用户展示的语句
 	pagination: true, //显示最下端的分页工具栏
@@ -812,6 +813,10 @@ function searchOrder() {
 							precision="2" required="true" missingMessage="非法金额"
 							class="easyui-numberbox" />
 			</div>
+			<div class="fitem" style="display: none;">
+				<label >发票号:</label> <input name="invId"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
 			<div class="fitem">
 				<label>付　款　时　间:</label> <input id="payDate" type="text"
 							class="easyui-datebox" name="payDate"
@@ -852,8 +857,8 @@ function searchOrder() {
 					class="easyui-validatebox" style="width: 140px;" required="true" />
 			</div>
 			<div class="fitem">
-				<label>开票日期:</label> <input id="arrivalTime" type="text"
-							class="easyui-datebox" name="arrivalTime"
+				<label>开票日期:</label> <input id="invDate" type="text"
+							class="easyui-datebox" name="invDate"
 							style="width: 145px;" required="true" editable="false" />
 			</div>
 			<div class="fitem">
@@ -930,6 +935,10 @@ function searchOrder() {
 				<label >进　货　总　价:</label> <input name="costPrice"
 					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
 			</div>
+			<div class="fitem" style="display: none;">
+				<label >应　付　金　额:</label> <input name="payables"
+					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>
+			</div>
 			<div class="fitem">
 				<label>发　票　单　号:</label> <input id="invId" type="text"
 				style="width: 145px;" class="easyui-combobox" name="invId" editable="false" />
@@ -943,7 +952,7 @@ function searchOrder() {
 			onclick="javascript:$('#orderofinv').dialog('close')" iconcls="icon-cancel">取消</a>
 	</div>
     <div id="details" class="easyui-dialog"
-		style="width: 420px; height: 300px; padding: 10px 20px;" closed="true"
+		style="width: 420px; height: 300px;" closed="true"
 		buttons="#details-buttons">
 		
 		<table id="dg1" class="easyui-datagrid" style="height: 200px;" >

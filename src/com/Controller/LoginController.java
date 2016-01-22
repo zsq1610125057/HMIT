@@ -619,6 +619,7 @@ public class LoginController {
 			pw = response.getWriter();
 			rowData = URLDecoder.decode(rowData,"UTF-8");
 			Order order = (Order) JSONObject.toBean(JSONObject.fromObject(rowData), Order.class);			
+			System.out.println("应付款"+order.getPayables());
 			projectService.updateorderofinv(order,action);
 		    pw.print(messageSuc());
 		} catch (SQLException e) {

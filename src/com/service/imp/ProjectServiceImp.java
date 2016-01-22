@@ -15,8 +15,10 @@ import com.vos.Order;
 import com.vos.OrderVO;
 import com.vos.PayTypeVo;
 import com.vos.Paymenthistory;
+import com.vos.ProSearchVO;
 import com.vos.Project;
 import com.vos.ProjectTypeVo;
+import com.vos.Schedule;
 import com.vos.Supplier;
 @Service
 public class ProjectServiceImp implements ProjectService {
@@ -146,5 +148,34 @@ public class ProjectServiceImp implements ProjectService {
 			throws SQLException {
 		// TODO Auto-generated method stub
 		return projectDao.getgetOrderHistory(ordId);
+	}
+	@Override
+	public List<Project> getProject(int firstRow, Integer pageSize,
+			ProSearchVO proSearchVO) throws SQLException {
+		return projectDao.getProject(firstRow,pageSize,proSearchVO);
+	}
+	@Override
+	public int getProjectCount(ProSearchVO proSearchVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getProjectCount(proSearchVO);
+	}
+	@Override
+	public void updateProjectStatus(int id, String action) throws SQLException {
+		
+		projectDao.updateProjectStatus(id,action);
+	}
+	@Override
+	public void addSchedule(Schedule schedule) throws SQLException {
+		projectDao.addSchedule(schedule);
+		
+	}
+	@Override
+	public List<Schedule> getProSchedule(int firstRow, Integer pageSize,int proId)
+			throws SQLException {	
+		return projectDao.getProSchedule(firstRow, pageSize,proId);
+	}
+	@Override
+	public int getProScheduleCount(int proId) throws SQLException {
+		return projectDao.getProScheduleCount(proId);
 	}
 }

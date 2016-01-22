@@ -132,14 +132,25 @@
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function() {
-					editCustomer('edit');
+					var rows = $("#dg").datagrid('getSelections');
+					if (rows.length < 1) {
+						$.messager.alert('操作提示', '请选择要修改的行', 'warning');
+					} else{
+						editCustomer('edit');
+						}				
 				}
 			}, '-', {
 				id : 'btnDel',
 				text : '删除',
 				iconCls : 'icon-cancel',
 				handler : function() {
-					deleteCustomer();
+					var rows = $("#dg").datagrid('getSelections');
+					if (rows.length < 1) {
+						$.messager.alert('操作提示', '请选择要修改的行', 'warning');
+					} else{
+						deleteCustomer();
+						}	
+					
 				}
 			}, '-' ],
 		});

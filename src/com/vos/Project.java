@@ -3,26 +3,15 @@ package com.vos;
 import java.util.Date;
 
 public class Project {
-
 	
 	private int id;
+	private int proId;
+	
 	private String proName;
 	private String proType;
 	private float proMoney;
 	private int cusId;//客户
 	private String cusName;
-	public String getCusName() {
-		return cusName;
-	}
-	public void setCusName(String cusName) {
-		this.cusName = cusName;
-	}
-	public int getCusId() {
-		return cusId;
-	}
-	public void setCusId(int cusId) {
-		this.cusId = cusId;
-	}
 	private String proBrokerage;//经手人
 	private String recevablesDate;//应收时间
 	private String deliveredDate;//收回时间
@@ -38,6 +27,44 @@ public class Project {
 	private String status;
 	private String proProgress;
 	private String lastUpdateBy;
+	private String receivablesDate;
+	private String completedDate;
+	private String completedDescription;
+	private String factRecevablesDate;
+	private String pTName;
+	
+	public int getProId() {
+		return proId;
+	}
+	public void setProId(int proId) {
+		this.proId = proId;
+	}
+	public String getpTName() {
+		return pTName;
+	}
+	public void setpTName(String pTName) {
+		this.pTName = pTName;
+	}
+	public String getCusName() {
+		return cusName;
+	}
+	public void setCusName(String cusName) {
+		this.cusName = cusName;
+	}
+	public int getCusId() {
+		return cusId;
+	}
+	public void setCusId(int cusId) {
+		this.cusId = cusId;
+	}
+	
+	
+	public String getReceivablesDate() {
+		return receivablesDate;
+	}
+	public void setReceivablesDate(String receivablesDate) {
+		this.receivablesDate = receivablesDate;
+	}
 	public String getLastUpdateBy() {
 		return lastUpdateBy;
 	}
@@ -75,9 +102,6 @@ public class Project {
 	public void setFactRecevablesDate(String factRecevablesDate) {
 		this.factRecevablesDate = factRecevablesDate;
 	}
-	private String completedDate;
-	private String completedDescription;
-	private String factRecevablesDate;
 	public String getStatus() {
 		return status;
 	}

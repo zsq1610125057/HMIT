@@ -79,37 +79,4 @@ public class EmployeeController {
 	
 	}
 	}
-	
-	@RequestMapping("/getAllEmployee")
-	@ResponseBody
-	public Map<String, Object> getAllEmployee(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber,HttpServletResponse response,@ModelAttribute EmpSearchVO empSearchVO) {
-		//System.out.println("customer______"+cusSearchVO.getEmpName());
-		Map<String, Object> map = new HashMap<String, Object>();
-		List<Employee> pageList = new ArrayList<Employee>();
-		int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
-		int intPageSize=pageSize==null||pageSize<=0?10:pageSize;
-		int firstRow = (pageNumber - 1) * pageSize;
-		try {
-			//list = customerService.getAllCustomer();
-			pageList = employeesService.getAllEmployee(firstRow, pageSize, empSearchVO);
-			int count = employeesService.getEmployeesCount();
-			System.out.println(pageList.size());
-		
-			for(Employee emp:pageList){
-				//System.out.println(emp.getRegDate());
-				emp.setRegDate1(emp.getRegDate().toString());
-				emp.setLastLoginDate1(emp.getLastLoginDate().toString());
-			}
-			
-			map.put("rows", pageList);
-			map.put("total", count);
-			return map;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			map.put("error", false);
-		}
-		return null;
-		
-	}
 }

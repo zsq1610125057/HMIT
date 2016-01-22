@@ -45,18 +45,4 @@ public class EmployeesServiceImp implements EmployeesService{
 	public void updateemployees(EmpSearchVO emp) throws SQLException {
 		employeesDao.updateemployees(emp);
 	}
-
-	@Override
-	public List<Employee> getAllEmployee(int firstRow, Integer pageSize,EmpSearchVO emp) throws SQLException {
-		// TODO Auto-generated method stub
-		return employeesDao.getAllEmployee(firstRow,pageSize,emp);
-	}
-
-	@Override
-	public int getEmployeesCount() throws SQLException {
-		// TODO Auto-generated method stub
-		return employeesDao.getEmployeesCount();
-	}
-	
-
 }

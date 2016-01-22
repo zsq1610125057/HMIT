@@ -10,6 +10,4 @@ import com.vos.Employees;
 
 public interface EmployeesDao {
 public void updateemployees(EmpSearchVO emp)throws SQLException;
-public List<Employee>getAllEmployee(int firstRow, Integer pageSize,EmpSearchVO emp) throws SQLException;
-public int getEmployeesCount() throws SQLException;
 }

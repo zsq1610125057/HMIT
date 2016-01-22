@@ -10,6 +10,4 @@ import com.vos.Employees;
 public interface EmployeesService {
 	public Employees queryById(Employees employees) throws SQLException;
 	public void updateemployees(EmpSearchVO emp) throws SQLException;
-	public List<Employee> getAllEmployee(int firstRow, Integer pageSize,EmpSearchVO emp) throws SQLException;
-	public int getEmployeesCount() throws SQLException;
 }

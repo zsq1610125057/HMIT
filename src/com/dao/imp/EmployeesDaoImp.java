@@ -41,31 +41,5 @@ public class EmployeesDaoImp implements EmployeesDao {
 			throw e;
 		}
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Employee> getAllEmployee(int firstRow, Integer pageSize,EmpSearchVO emp) throws SQLException {
-		try{
-			Map<String,Object> map = new HashMap<String, Object>();
-			List<Employee> list = new ArrayList<Employee>();
-			map.put("roleId", emp.getRoleId());
-			map.put("title", emp.getTitle());
-			map.put("firstRow",firstRow);
-			map.put("pageSize",pageSize);
-			
-			list = sqlMapClient.queryForList("getAllEmployee",map);
-			return list;
-
-		}catch(SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	@Override
-	public int getEmployeesCount() throws SQLException {
-		int in=(Integer) sqlMapClient.queryForObject("getEmployeesCount");
-		return in;
-	}
-
+	
 }

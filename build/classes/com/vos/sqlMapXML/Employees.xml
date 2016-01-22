@@ -9,21 +9,6 @@
 		select * from employees 
 	]]>
 	</select>
-<select id="getAllEmployee" resultClass="com.vos.Employee" parameterClass="java.util.Map">  
-	<![CDATA[
-		select empId,empName,regDate,lastLoginDate,email,contact,loginName,roleId,title from employees 
-		]]>
-		<dynamic prepend="WHERE">      
-                 <isNotEmpty prepend="AND" property="title">       
-                     <![CDATA[ title =#title#]]>    
-                 </isNotEmpty> 
-                  <isNotEmpty prepend="AND" property="roleId">       
-                     <![CDATA[ roleId =#roleId#]]>    
-                 </isNotEmpty>           
-		 </dynamic>	
-		limit #firstRow#,#pageSize#
-	
-	</select>
 	<select id="getEmployeesCount" resultClass="java.lang.Integer" >
 	<![CDATA[
 		select count(*) from employees 

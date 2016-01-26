@@ -29,6 +29,7 @@
 							"menus":[
 									{"menuname":"新建项目","icon":"icon-role","url":"project/newproject.jsp"},
 									{"menuname":"项目跟踪","icon":"icon-edit","url":"project/traceproject.jsp"},
+									{"menuname":"新建招标项目","icon":"icon-edit","url":"project/tenderproject.jsp"},
 								]
 						},{"menuid":"2","icon":"icon-sys","menuname":"采购管理",
 							"menus":[{"menuname":"采购管理","icon":"icon-nav","url":"project/order.jsp"},
@@ -71,7 +72,13 @@
         function closeLogin() {
         	close();
         }
-
+    	function ProInfo(index) {
+	        $('#inv').dialog("open").dialog('setTitle', '到期项目详情');
+	        $("#p11").datagrid('selectRow',index);
+	        var row = $('#p11').datagrid("getSelected");
+	   	    $('#dg1').datagrid('load', row);   
+		 
+	}
         //修改密码
         function serverLogin() {
             var $newpass = $('#txtNewPass');
@@ -155,7 +162,7 @@
 //                 resizable:false,
 //             });
 			
-            var options = {
+<%--             var options = {
             	    title: "到期账款",
             	    iconCls: 'icon-ok',
             	    href : '<%=basePath%>getMaturityMoneyList',
@@ -171,8 +178,8 @@
 				}
 			} ] ]
 
-		};
-		$("#p11").panel(options);
+		}; --%>
+	//	$("#p11").panel(options);
 
 		//init datagrid
 
@@ -208,7 +215,7 @@
 		</div>
 
 	</div>
-	<div region="east" split="true" title="备忘录" style="width: 230px;"
+	<div region="east" split="true" title="备忘录" style="width: 220px;"
 		id="east"></div>
 	<div id="mainPanle" region="center"
 		style="background: #eee; overflow-y: hidden">
@@ -221,9 +228,49 @@
 						<tr>
 							<td width="250">
 
-								<div style="width: 250px; margin-right: 5px; margin-left: 10px;">
-									<div id="p11" class="easyui-panel" title="到期账款"
-										style="height: 380px;" data-options="">
+								  <div style="width: 250px; height:480px;margin-right: 5px; margin-left: 10px;">
+									<div id="p11" class="easyui-panel" title="" style="height:380px;overflow-x: visible;" data-options="">
+									</div>
+									<script type="text/javascript">	
+								    $('#p11').datagrid({
+								    	url:'<%=basePath%>getMaturityMoneyList',
+								    	title:"到期账款",
+								    	nowrap : false, //文字自动换行
+										fitColumns : true, //列自适应
+										pagination : true, //底部显示分页工具栏
+										fit : true,
+										pageSize:10,
+										pageList:[3,5,10],
+										rownumbers : true, // 当true时显示行号 
+										singleSelect : true, // 只允许当前选择一行	
+										iconCls : 'icon-save',
+										idField : 'id', //标识列 
+										columns : [ [ {
+											title : '项目名称',
+											field : 'proName',
+											editor : 'text',
+											align : 'center',
+											width : 60,
+											hidden: 'true'	
+										},{
+											title : '项目Id',
+											field : 'id',
+											editor : 'text',
+											align : 'center',
+											hidden : 'true',
+											width : 60
+											
+										},{
+											title:'项目名称',
+											field:'id1',
+											width:50,
+											formatter:  function(value,row,index) {		
+												return "<a href='javascript:void(0);' onclick='ProInfo("+index+")'>"+row.proName+"</a> ";
+											}
+										}
+										]]
+								    })
+									</script>
 										<ul id="guoqi" style="margin-top: 10px;">
 										</ul>
 									</div>
@@ -236,15 +283,138 @@
 							</td>
 							<td>
 								<div style="margin-right: 10px;">
+							<div style="margin-right: 12px; width:700px; height:270px; padding: 10px 20px;">
 									<div id="qgd" class="easyui-datagrid" title="近期项目"
-										style="height: 255px;" data-options="iconCls:'icon-ok'">
+										style="height: 260px;" data-options="iconCls:'icon-ok'">	
 									</div>
+									 <script type="text/javascript">
+		    window.customerlist = getCustomerList('<%=basePath%>getCustomerList');
+			$('#qgd').datagrid({    
+				url: '<%=basePath%>getNowProject', 
+			nowrap : false, //文字自动换行
+			fitColumns : true, //列自适应
+			pagination : true, //底部显示分页工具栏
+			fit : true,
+			pageSize:10,
+			pageList:[3,5,10],
+			rownumbers : true, // 当true时显示行号 
+			singleSelect : true, // 只允许当前选择一行	
+			iconCls : 'icon-save',
+			idField : 'id', //标识列 
+			columns : [ [ {
+				title : '项目名称',
+				field : 'proName',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '项目金额',
+				field : 'proMoney',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '项目经手人',
+				field : 'proBrokerage',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '项目开始时间',
+				field : 'beginDate',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '客户公司',
+				field : 'cusId',
+				editor : 'text',
+				align : 'center',
+				width : 60,
+				formatter:  function(value,row,index) {
+					for(var i=0; i<customerlist.length; i++){
+						if(customerlist[i].cusId == value){
+							return customerlist[i].compName;
+						}
+					}
+				}
+				
+			}
+			] ]
+});
+
+		    function getCustomerList(url) {
+		    	var temp;
+		    	$.ajax({
+		    		url:url,
+		    		type:"get",
+		    		async:false,
+		    		dataType:"json",
+		    		success:function(data){
+		    			temp = data;
+		    		}
+		    	});
+		    	return temp;
+		    }
+			</script>
 								</div>
-								<div style="margin-top: 5px; margin-right: 10px;">
-									<div id="cygj" class="easyui-panel" title="常用链接"
-										style="height: 125px; overflow-x: visible;" data-options="">
-										<ul id="usefulLinks"
-											style="margin-top: 10px; margin-right: 30px;">
+								<div style="margin-top: 5px; margin-right: 12px;width: 700px; height:220px;padding: 10px 20px;">
+	                                <div id="cygj" class="easyui-datagrid" title="近期招标项目"
+										style="height: 2125px;" data-options="iconCls:'icon-ok'">	
+									</div>
+									 <script type="text/javascript">
+			$('#cygj').datagrid({    
+				url: '<%=basePath%>getTenderProject', 
+			nowrap : false, //文字自动换行
+			fitColumns : true, //列自适应
+			pagination : true, //底部显示分页工具栏
+			fit : true,
+			pageSize:10,
+			pageList:[3,5,10],
+			rownumbers : true, // 当true时显示行号 
+			singleSelect : true, // 只允许当前选择一行	
+			iconCls : 'icon-save',
+			idField : 'id', //标识列 
+			columns : [ [ {
+				title : '招标项目',
+				field : 'tdProject',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '招标负责人',
+				field : 'tdEmployee',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '招标时间',
+				field : 'tdDate',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '招标地点',
+				field : 'tdPlace',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '客户公司',
+				field : 'comName',
+				editor : 'text',
+				align : 'center',
+				width : 60,
+
+				
+			}
+			] ]
+});
+
+
+
+			</script>
+										
 										</ul>
 									</div>
 								</div>
@@ -295,6 +465,73 @@
 		<div id="mm-tabcloseleft">当前页左侧全部关闭</div>
 		<div class="menu-sep"></div>
 		<div id="mm-exit">退出</div>
+	</div>
+   <div id="inv" class="easyui-dialog"
+		style="width:460px; height:350px;" closed="true"
+		buttons="#inv-buttons">
+		<div style="width:440px; height:270px; ">
+		<table id="dg1" class="easyui-datagrid" style="height:300px;"
+			title="">
+		</table>
+		
+	</div>
+		<script type="text/javascript">
+			$('#dg1').datagrid({    
+				url: '<%=basePath%>getProInfo', 
+        	//title : '供应商信息',
+			nowrap : false, //文字自动换行
+			fitColumns : true, //列自适应
+			pagination : true, //底部显示分页工具栏
+			fit : true,
+			pageSize:10,
+			pageList:[3,5,10],
+			rownumbers : true, // 当true时显示行号 
+			singleSelect : true, // 只允许当前选择一行	
+			iconCls : 'icon-save',
+			idField : 'id', //标识列 
+			columns : [ [ {
+				title : '项目名称',
+				field : 'proName',
+				editor : 'text',
+				align : 'center',
+				width : 60
+			}, {
+				title : '项目金额',
+				field : 'proMoney',
+				editor : 'text',
+				align : 'center',
+				width :   60
+			}, {
+				title : '项目经手人',
+				field : 'proBrokerage',
+				editor : 'text',
+				align : 'center',
+				width :  60
+			}, {
+				title : '项目竣工时间',
+				field : 'completionDate',
+				editor : 'text',
+				align : 'center',
+				width :   60
+			}, {
+				title : '客户公司',
+				field : 'cusId',
+				editor : 'text',
+				align : 'center',
+				width :   60,
+				hidden : 'true',
+				
+			}
+			] ]
+});
+
+			</script>
+
+		<div id="inv-buttons">
+ <a href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="javascript:$('#inv').dialog('close')" iconcls="icon-cancel">取消</a>
+	</div>
+	
 	</div>
 
 

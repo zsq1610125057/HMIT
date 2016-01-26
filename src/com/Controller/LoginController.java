@@ -58,6 +58,7 @@ import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.SupSearchVO;
 import com.vos.Supplier;
+import com.vos.Tender;
 import com.vos.Warehousemanagement;
 
 @Controller
@@ -865,6 +866,98 @@ System.out.println("11"+supplier.getSupId());
 				
 				pageList = projectService.getgetOrderHistory(paymenthistory.getOrdId());			
 				map.put("rows", pageList);
+				return map;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				map.put("error", false);
+			}
+			return null;
+			
+		}
+		
+		@RequestMapping("/getMaturityMoneyList")
+		public void getMaturityMoneyList(HttpServletResponse response) {
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			List<Project> list = new ArrayList<Project>();
+			try {
+				list =projectService.getMaturityMoneyList();
+				if (list != null && list.size() > 0) {
+					JSONArray json = JSONArray.fromObject(list);
+					pw.write(json.toString());	
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		@RequestMapping("/getProInfo")
+		public void getProInfo(HttpServletResponse response,@ModelAttribute Project project){
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			List<Project> list = new ArrayList<Project>();
+			try {
+				list = projectService.getProInfoList(project.getId());
+				if (list != null && list.size() > 0) {
+					JSONArray json = JSONArray.fromObject(list);
+					pw.write(json.toString());	
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		//首页的近期项目列表
+		@RequestMapping("/getNowProject")
+		@ResponseBody
+		public Map<String, Object> getNowProject(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<Project> pageList = new ArrayList<Project>();
+			int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
+			int intPageSize=pageSize==null||pageSize<=0?10:pageSize;
+			int firstRow = (pageNumber - 1) * pageSize;
+			try {
+				pageList = projectService.getNowProject(firstRow, pageSize);
+				int count = projectService.getNowProjectCount();
+				map.put("rows", pageList);
+				map.put("total", count);
+				return map;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				map.put("error", false);
+			}
+			return null;
+			
+		}
+		//首页招标项目
+		@RequestMapping("/getTenderProject")
+		@ResponseBody
+		public Map<String, Object> getTenderProject(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<Tender> pageList = new ArrayList<Tender>();
+			int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
+			int intPageSize=pageSize==null||pageSize<=0?10:pageSize;
+			int firstRow = (pageNumber - 1) * pageSize;
+			try {
+				pageList = projectService.getTenderProject(firstRow, pageSize);
+				int count = projectService.getTenderProjectCount();
+				map.put("rows", pageList);
+				map.put("total", count);
 				return map;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

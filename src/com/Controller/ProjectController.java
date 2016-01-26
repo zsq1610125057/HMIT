@@ -36,6 +36,7 @@ import com.vos.Order;
 import com.vos.ProSearchVO;
 import com.vos.Project;
 import com.vos.Schedule;
+import com.vos.Tender;
 import com.vos.Warehousemanagement;
 
 @Controller
@@ -215,4 +216,32 @@ public class ProjectController {
 			return null;
 			
 		}
+		
+		@RequestMapping("/addTender")
+		@ResponseBody
+		public void addTender(@RequestParam("data") String td,HttpServletRequest request,
+				HttpServletResponse response) throws Exception {
+			
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+				td = URLDecoder.decode(td, "UTF-8");
+				Tender tender = (Tender) JSONObject.toBean(JSONObject.fromObject(td), Tender.class);
+				projectService.addTender(tender);
+				JsonResult jr = new JsonResult();
+				jr.setMsg("添加招标成功！");
+				jr.setResult(CREATE_NEW_SUCCESS_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				JsonResult jr = new JsonResult();
+				jr.setMsg("添加招标信息失败！");
+				jr.setResult(CREATE_NEW_ERROR_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			}
+
+	}
+
 }

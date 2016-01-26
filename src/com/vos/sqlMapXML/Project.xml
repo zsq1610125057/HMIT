@@ -191,4 +191,44 @@
 	select count(*) from proschedule where proId=#proId#
 	]]>
 	</select>
+	<select id="getNowProject" resultClass="com.vos.Project" parameterClass="java.util.Map">
+	<![CDATA[
+		select proName,proMoney,proBrokerage,beginDate,cusId from project where beginDate<str_to_date(now(),'%Y-%m-%d') limit #beginRow#,#pageSize#
+]]>	
+		
+	</select>
+		<select id="getNowProjectCount" resultClass="java.lang.Integer" parameterClass="com.vos.Project">
+	<![CDATA[
+		select count(*) from project 
+		]]>		
+	</select>
+	
+		<select id="getTenderProject" resultClass="com.vos.Tender" parameterClass="java.util.Map">
+	<![CDATA[
+		select TdProject,TdEmployee,TdDate,TdPlace,ComName from tender where tdDate>str_to_date(now(),'%Y-%m-%d') limit #beginRow#,#pageSize#
+]]>	
+		
+	</select>
+		<select id="getTenderProjectCount" resultClass="java.lang.Integer" parameterClass="com.vos.Tender">
+	<![CDATA[
+		select count(*) from tender 
+		]]>		
+	</select>
+		
+	<select id="getProInfoList" resultClass="com.vos.Project">
+	<![CDATA[
+		select proName ,proMoney,proBrokerage,completionDate,cusId  from project where proId=#id# 
+	]]>
+	</select>
+	<select id="getMaturityMoneyList" resultClass="com.vos.Project">
+	<![CDATA[
+		select proId as id ,proName  from project where status='已完成'
+	]]>
+	</select>
+	
+		<insert id="addTender" parameterClass="com.vos.Tender">
+	<![CDATA[				  
+			insert into tender(TdProject,TdEmployee,TdPlace,ComName,TdDate) values(#tdProject#,#tdEmployee#,#tdPlace#,#comName#,str_to_date(#tdDate#, '%Y-%m-%d'))
+			]]>
+	</insert> 
 </sqlMap>

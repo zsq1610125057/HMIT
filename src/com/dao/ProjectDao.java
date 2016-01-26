@@ -15,6 +15,7 @@ import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.Schedule;
 import com.vos.Supplier;
+import com.vos.Tender;
 
 public interface ProjectDao {
 
@@ -66,4 +67,15 @@ public interface ProjectDao {
     public List<Schedule> getProSchedule(int firstRow, Integer pageSize,int proId)throws SQLException;
     //获取项目进度数量
     public int getProScheduleCount(int proId) throws SQLException;
+	public List<Project> getNowProject(int firstRow,int pageSize) throws SQLException;
+	public int getNowProjectCount() throws SQLException;
+	
+	//招标项目
+	public List<Tender> getTenderProject(int firstRow,int pageSize) throws SQLException;
+	public int getTenderProjectCount() throws SQLException;
+	
+	public List<Project> getProInfoList(int id) throws SQLException;
+	//到期账款
+	public List<Project> getMaturityMoneyList() throws SQLException;
+	public void addTender(Tender tender) throws SQLException;
 }

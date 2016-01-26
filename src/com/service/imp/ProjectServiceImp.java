@@ -20,6 +20,7 @@ import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.Schedule;
 import com.vos.Supplier;
+import com.vos.Tender;
 @Service
 public class ProjectServiceImp implements ProjectService {
 
@@ -177,5 +178,42 @@ public class ProjectServiceImp implements ProjectService {
 	@Override
 	public int getProScheduleCount(int proId) throws SQLException {
 		return projectDao.getProScheduleCount(proId);
+	}
+	@Override
+	public List<Tender> getTenderProject(int firstRow, int pageSize)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getTenderProject(firstRow, pageSize);
+	}
+	@Override
+	public int getTenderProjectCount() throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getTenderProjectCount();
+	}
+	@Override
+	public List<Project> getMaturityMoneyList() throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getMaturityMoneyList();
+	}
+	@Override
+	public List<Project> getNowProject(int firstRow, int pageSize)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getNowProject(firstRow, pageSize);
+	}
+	@Override
+	public int getNowProjectCount() throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getNowProjectCount();
+	}
+	@Override
+	public List<Project> getProInfoList(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getProInfoList(id);
+	}
+	@Override
+	public void addTender(Tender tender) throws SQLException {
+		// TODO Auto-generated method stub
+		projectDao.addTender(tender);
 	}
 }

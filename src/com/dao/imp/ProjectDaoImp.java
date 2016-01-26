@@ -23,6 +23,7 @@ import com.vos.Project;
 import com.vos.ProjectTypeVo;
 import com.vos.Schedule;
 import com.vos.Supplier;
+import com.vos.Tender;
 
 public class ProjectDaoImp implements ProjectDao {
 
@@ -319,4 +320,70 @@ public class ProjectDaoImp implements ProjectDao {
 		int in=(Integer) sqlMapClient.queryForObject("getProScheduleCount",map);
 		return in;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Tender> getTenderProject(int firstRow, int pageSize)
+			throws SQLException {
+		List<Tender> list=new ArrayList<Tender>();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("beginRow", firstRow);
+		map.put("pageSize", pageSize);
+		list = sqlMapClient.queryForList("getTenderProject",map);
+		return list;
+	}
+	@Override
+	public int getTenderProjectCount() throws SQLException {
+		int count = 0;
+		count = (Integer) sqlMapClient.queryForObject("getTenderProjectCount");
+		return count;
+	}
+
+@SuppressWarnings("unchecked")
+@Override
+public List<Project> getMaturityMoneyList() throws SQLException {
+	try {
+		List<Project> list = new ArrayList<Project>();
+		list = sqlMapClient.queryForList("getMaturityMoneyList");
+		return list;
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return null;
+}
+@SuppressWarnings("unchecked")
+@Override
+public List<Project> getNowProject(int firstRow, int pageSize)
+		throws SQLException {
+	List<Project> list=new ArrayList<Project>();
+	Map<String,Object> map = new HashMap<String,Object>();
+	map.put("beginRow", firstRow);
+	map.put("pageSize", pageSize);
+	list = sqlMapClient.queryForList("getNowProject",map);
+	return list;
+}
+@Override
+public int getNowProjectCount() throws SQLException {
+	// TODO Auto-generated method stub
+	int count = 0;
+	count = (Integer) sqlMapClient.queryForObject("getNowProjectCount");
+	return count;
+}
+@SuppressWarnings("unchecked")
+@Override
+public List<Project> getProInfoList(int id) throws SQLException {
+	try {
+		return sqlMapClient.queryForList("getProInfoList",id);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return null;
+}
+
+@Override
+public void addTender(Tender tender) throws SQLException {
+	// TODO Auto-generated method stub
+	sqlMapClient.insert("addTender",tender);
+}
 }

@@ -215,7 +215,7 @@
 		</div>
 
 	</div>
-	<div region="east" split="true" title="备忘录" style="width: 220px;"
+	<div region="east" split="true" title="备忘录" style="width: 190px;"
 		id="east"></div>
 	<div id="mainPanle" region="center"
 		style="background: #eee; overflow-y: hidden">
@@ -228,7 +228,7 @@
 						<tr>
 							<td width="250">
 
-								  <div style="width: 250px; height:480px;margin-right: 5px; margin-left: 10px;">
+								  <div style="width: 290px; height:520px;margin-right: 5px; margin-left: 2px;">
 									<div id="p11" class="easyui-panel" title="" style="height:380px;overflow-x: visible;" data-options="">
 									</div>
 									<script type="text/javascript">	

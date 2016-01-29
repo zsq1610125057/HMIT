@@ -28,8 +28,69 @@
 		 </dynamic>	
 		limit #firstRow#,#pageSize#
 	</select>
-	<select id="getProjectCount" resultClass="java.lang.Integer" >
+	<select id="getProject1" resultClass="com.vos.Project" parameterClass="com.vos.ProSearchVO">
+	  <![CDATA[
+	  select * from project 
+	  ]]>
+	  <dynamic prepend="WHERE"> 
+	             <isEmpty prepend="AND" property="status">
+	             <![CDATA[ status !="已立项"]]>
+	             </isEmpty>
+                 <isNotEmpty prepend="AND" property="status">       
+                     <![CDATA[ status =#status#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="pTName">       
+                     <![CDATA[ pTName =#pTName#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="proBrokerage">       
+                     <![CDATA[ proBrokerage =#proBrokerage#]]>    
+                 </isNotEmpty> 
+                   <isNotEmpty prepend="AND" property="cusId">       
+                     <![CDATA[ cusId =#cusId#]]>    
+                 </isNotEmpty>         
+		 </dynamic>	
+		limit #firstRow#,#pageSize#
+	</select>
+	<select id="getProjectCount1" resultClass="java.lang.Integer" parameterClass="com.vos.ProSearchVO">
+	 <![CDATA[
 	  select count(*) from project 
+	  ]]>
+	  <dynamic prepend="WHERE"> 
+	             <isEmpty prepend="AND" property="status">
+	             <![CDATA[ status !="已立项"]]>
+	             </isEmpty>
+                 <isNotEmpty prepend="AND" property="status">       
+                     <![CDATA[ status =#status#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="pTName">       
+                     <![CDATA[ pTName =#pTName#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="proBrokerage">       
+                     <![CDATA[ proBrokerage =#proBrokerage#]]>    
+                 </isNotEmpty> 
+                   <isNotEmpty prepend="AND" property="cusId">       
+                     <![CDATA[ cusId =#cusId#]]>    
+                 </isNotEmpty>         
+		 </dynamic>	
+	</select>
+	<select id="getProjectCount" resultClass="java.lang.Integer" parameterClass="com.vos.ProSearchVO">
+	 <![CDATA[
+	  select count(*) from project 
+	  ]]>
+	  <dynamic prepend="WHERE"> 
+                 <isNotEmpty prepend="AND" property="status">       
+                     <![CDATA[ status =#status#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="pTName">       
+                     <![CDATA[ pTName =#pTName#]]>    
+                 </isNotEmpty> 
+                  <isNotEmpty prepend="AND" property="proBrokerage">       
+                     <![CDATA[ proBrokerage =#proBrokerage#]]>    
+                 </isNotEmpty> 
+                   <isNotEmpty prepend="AND" property="cusId">       
+                     <![CDATA[ cusId =#cusId#]]>    
+                 </isNotEmpty>         
+		 </dynamic>	
 	</select>
 	<select id="getProjectTypeList" resultClass="com.vos.ProjectTypeVo">
 	<![CDATA[
@@ -176,6 +237,16 @@
 		update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),status=#action# where  proId = #id#
 	]]>
 	</update>
+	<update id="updateProInv" parameterClass="java.util.Map">
+	<![CDATA[
+		update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),IfInv='1' where  proId = #proId#
+	]]>
+	</update>
+	<update id="updateProjectStatus1" parameterClass="java.util.Map">
+	<![CDATA[
+		update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),CompletionDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),status=#action# where  proId = #id#
+	]]>
+	</update>
 	<insert id="addschedule" parameterClass="com.vos.Schedule" >
 	<![CDATA[
 	insert  into proschedule(proId,addPeople,addDate,schedule) values (#proId#,#addPeople#,str_to_date(now(),'%Y-%m-%d %H:%i:%s'),#schedule#)
@@ -231,7 +302,7 @@
 			insert into tender(TdProject,TdEmployee,TdPlace,ComName,TdDate) values(#tdProject#,#tdEmployee#,#tdPlace#,#comName#,str_to_date(#tdDate#, '%Y-%m-%d'))
 			]]>
 	</insert> 
-	
+
 	<select id="getAllInvoice" resultClass="com.vos.Invoice" parameterClass="java.util.Map">
 	<![CDATA[
 		select invContent,invId,invMoney,invDate,invType,proId from Invoice
@@ -298,4 +369,14 @@
 			delete from contract where contId = #contId#
 		]]>
 		</delete>
+    <select id="getpropaymoney" parameterClass="java.util.Map" resultClass="com.vos.Project">
+   <![CDATA[
+    select paymoney from project where proId=#proId# 
+    ]]>
+    </select>
+    <update id="updatepropaymoney" parameterClass="java.util.Map">
+    <![CDATA[
+    update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),paymoney=#money# where proId=#proId#
+    ]]>
+    </update>
 </sqlMap>

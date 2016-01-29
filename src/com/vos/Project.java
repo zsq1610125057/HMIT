@@ -32,7 +32,14 @@ public class Project {
 	private String completedDescription;
 	private String factRecevablesDate;
 	private String pTName;
+	private float paymoney;
 	
+	public float getPaymoney() {
+		return paymoney;
+	}
+	public void setPaymoney(float paymoney) {
+		this.paymoney = paymoney;
+	}
 	public int getProId() {
 		return proId;
 	}

@@ -886,8 +886,8 @@ System.out.println("11"+supplier.getSupId());
 			Map<String, Object> map = new HashMap<String, Object>();
 			List<Paymenthistory> pageList = new ArrayList<Paymenthistory>();
 			try {
-				
-				pageList = projectService.getgetOrderHistory(paymenthistory.getOrdId());			
+				paymenthistory.setProId(0);
+				pageList = projectService.getgetOrderHistory(paymenthistory);			
 				map.put("rows", pageList);
 				return map;
 			} catch (SQLException e) {

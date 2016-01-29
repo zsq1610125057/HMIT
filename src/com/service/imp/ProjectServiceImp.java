@@ -148,10 +148,10 @@ public class ProjectServiceImp implements ProjectService {
 		
 	}
 	@Override
-	public List<Paymenthistory> getgetOrderHistory(int ordId)
+	public List<Paymenthistory> getgetOrderHistory(Paymenthistory paymenthistory)
 			throws SQLException {
 		// TODO Auto-generated method stub
-		return projectDao.getgetOrderHistory(ordId);
+		return projectDao.getgetOrderHistory(paymenthistory);
 	}
 	@Override
 	public List<Project> getProject(int firstRow, Integer pageSize,
@@ -256,5 +256,39 @@ public class ProjectServiceImp implements ProjectService {
 		// TODO Auto-generated method stub
 		projectDao.deleteContract(contId);
 	}
-
+	public List<Project> getProject1(int firstRow, Integer pageSize,
+			ProSearchVO proSearchVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getProject1(firstRow,pageSize,proSearchVO);
+	}
+	@Override
+	public int getProjectCount1(ProSearchVO proSearchVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getProjectCount1(proSearchVO);
+	}
+	@Override
+	public void updateProInv(int proId) {
+		projectDao.updateProInv(proId);
+		
+	}
+	@Override
+	public List<Invoice> getproinv(int proId) {
+		return projectDao.getproinv(proId);
+		
+	}
+	@Override
+	public void addproPay(Paymenthistory paymenthistory) throws SQLException {
+		projectDao.addproPay(paymenthistory);
+		
+	}
+	@Override
+	public Project getpropaymoney(int proId) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getpropaymoney(proId);
+	}
+	@Override
+	public void updatepropaymoney(int proId, float money) {
+		// TODO Auto-generated method stub
+		projectDao.updatepropaymoney( proId, money);
+	}
 }

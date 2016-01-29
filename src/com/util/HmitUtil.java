@@ -25,4 +25,5 @@ public class HmitUtil {
 	
 	public static final String TITLE_BUSINESS_MANAGER = "业务经理";
 	
+	
 }

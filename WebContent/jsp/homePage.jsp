@@ -30,6 +30,7 @@
 									{"menuname":"新建项目","icon":"icon-role","url":"project/newproject.jsp"},
 									{"menuname":"项目跟踪","icon":"icon-edit","url":"project/traceproject.jsp"},
 									{"menuname":"新建招标项目","icon":"icon-edit","url":"project/tenderproject.jsp"},
+									{"menuname":"项目付款记录","icon":"icon-edit","url":"project/payproject.jsp"},
 								]
 						},{"menuid":"2","icon":"icon-sys","menuname":"采购管理",
 							"menus":[{"menuname":"采购管理","icon":"icon-nav","url":"project/order.jsp"},

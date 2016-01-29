@@ -139,7 +139,7 @@ $(function (){
 			} else if (row.status == '<%=HmitUtil.ORDER_STATUS_CONFIRMED%>') {
 				return "<a href='javascript:void(0);' onclick='confirmArrived("+index+")'>确认到货</a> ";
 			} else if (row.invId == null && row.payables != 0 ) {
-				return "<a href='javascript:void(0);' onclick='confirmPay("+index+")'>确认付款</a><br><a href='javascript:void(0);' onclick='confirmInv("+index+")'>确认开票</a>  ";
+				return "<a href='javascript:void(0);' onclick='confirmPay("+index+")'>确认付款</a><br><a href='javascript:void(0);' onclick='confirmInv("+index+")'>确认收票</a>  ";
 			} else if (row.invId == null && row.payables == 0 ) {
 				return "<a href='javascript:void(0);' onclick='confirmInv("+index+")'>确认开票</a> ";
 			}else if (row.invId != null && row.payables != 0 ) {

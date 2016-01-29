@@ -255,12 +255,17 @@ public class ProjectDaoImp implements ProjectDao {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Paymenthistory> getgetOrderHistory(int ordId)
+	public List<Paymenthistory> getgetOrderHistory(Paymenthistory paymenthistory)
 			throws SQLException {
 		List<Paymenthistory> list = null;
 		Map<String,Object> map = new HashMap<String,Object>();
-		//int endRow = pageSize+firstRow;
-		map.put("ordId", ordId);
+	    if(paymenthistory.getOrdId()==0){
+	    map.put("ordId", null);
+		map.put("proId", paymenthistory.getProId());
+		}else{
+		map.put("ordId", paymenthistory.getOrdId());
+		map.put("proId", null);
+		}
 		list = sqlMapClient.queryForList("getOrderHistory",map);
 		return list;
 	}
@@ -292,8 +297,12 @@ public class ProjectDaoImp implements ProjectDao {
 		map.put("id", id);
 		map.put("action",action);
 		map.put("lastUpdateBy", HmitUtil.CURRENT_USER);
+		if(action.equals(HmitUtil.ORDER_STATUS_INVED)){
+			sqlMapClient.update("updateProjectStatus1", map);
+		}else{
 		sqlMapClient.update("updateProjectStatus", map);
 	}
+		}
 	@Override
 	public void addSchedule(Schedule schedule) throws SQLException {
 		schedule.setAddPeople(HmitUtil.CURRENT_USER);
@@ -385,5 +394,84 @@ public List<Project> getProInfoList(int id) throws SQLException {
 public void addTender(Tender tender) throws SQLException {
 	// TODO Auto-generated method stub
 	sqlMapClient.insert("addTender",tender);
+}
+@SuppressWarnings("unchecked")
+@Override
+public List<Project> getProject1(int firstRow, Integer pageSize,
+		ProSearchVO proSearchVO) throws SQLException {
+	try{
+		proSearchVO.setFirstRow(firstRow);
+		proSearchVO.setPageSize(pageSize);
+		List<Project> list = new ArrayList<Project>();
+		String status=proSearchVO.getStatus();
+		if("已立项".equals(status)){
+			proSearchVO.setStatus("wu");
+		}
+		list = sqlMapClient.queryForList("getProject1",proSearchVO);
+		return list;
+	
+	}catch(SQLException e) {
+		e.printStackTrace();
+		throw e;
+	}
+	}
+@Override
+public int getProjectCount1(ProSearchVO proSearchVO) throws SQLException {
+	String status=proSearchVO.getStatus();
+	if("已立项".equals(status)){
+		proSearchVO.setStatus("wu");
+	}
+	int in=(Integer) sqlMapClient.queryForObject("getProjectCount1",proSearchVO);
+	return in;
+}
+@Override
+public void updateProInv(int proId) {
+	Map<String,Object> map = new HashMap<String,Object>();
+	map.put("proId", proId);
+	map.put("lastUpdateBy", HmitUtil.CURRENT_USER);
+	try {
+		sqlMapClient.update("updateProInv", map);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+@SuppressWarnings("unchecked")
+@Override
+public List<Invoice> getproinv(int proId) {
+	Map<String,Object> map = new HashMap<String,Object>();
+	map.put("proId", proId);
+	List<Invoice> list = new ArrayList<Invoice>();
+	try {
+		list=sqlMapClient.queryForList("getproinv", map);
+		return list;
+	} catch (SQLException e) {
+		return null;
+	}
+}
+@Override
+public void addproPay(Paymenthistory paymenthistory) throws SQLException {
+	sqlMapClient.insert("addproPay", paymenthistory);
+	
+}
+@Override
+public Project getpropaymoney(int proId) throws SQLException {
+	Map<String,Object> map = new HashMap<String, Object>();
+	map.put("proId", proId);
+	return (Project)sqlMapClient.queryForObject("getpropaymoney", map);
+}
+@Override
+public void updatepropaymoney(int proId, float money) {
+	Map<String,Object> map = new HashMap<String, Object>();
+	map.put("proId", proId);
+	map.put("money", money);
+	map.put("lastUpdateBy", HmitUtil.CURRENT_USER);
+	try {
+		sqlMapClient.update("updatepropaymoney", map);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 }
 }

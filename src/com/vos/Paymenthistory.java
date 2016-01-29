@@ -10,9 +10,14 @@ private String payRemarks;
 private float remainingSum;
 private String payWay;
 private String pWName;
+private String proName;
 
-
-
+public String getProName() {
+	return proName;
+}
+public void setProName(String proName) {
+	this.proName = proName;
+}
 public String getpWName() {
 	return pWName;
 }

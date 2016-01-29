@@ -56,11 +56,15 @@ public interface ProjectService {
     //添加发票信息
     public void updateorderofinv(Order order, String action)throws SQLException;
     //获取付款详情
-    public List<Paymenthistory> getgetOrderHistory(int ordId)throws SQLException ;
+    public List<Paymenthistory> getgetOrderHistory(Paymenthistory paymenthistory)throws SQLException ;
     //获取项目
     public List<Project> getProject(int firstRow, Integer pageSize,ProSearchVO proSearchVO) throws SQLException;
+    //获取付款项目
+    public List<Project> getProject1(int firstRow, Integer pageSize,ProSearchVO proSearchVO) throws SQLException;
     
     public int getProjectCount(ProSearchVO proSearchVO) throws SQLException;
+    //获取付款记录数目
+    public int getProjectCount1(ProSearchVO proSearchVO) throws SQLException;
     //修改项目状态
     public void updateProjectStatus(int id,String action)throws SQLException;
     //添加项目施工进度信息
@@ -82,4 +86,14 @@ public interface ProjectService {
 	//到期账款
 	public List<Project> getMaturityMoneyList() throws SQLException;
 	public void addTender(Tender tender) throws SQLException;
+	//修改发票信息
+	public void updateProInv(int proId);
+	//获取项目发票信息
+	public List<Invoice> getproinv(int proId);
+	//添加收款信息
+	public void addproPay(Paymenthistory paymenthistory) throws SQLException;
+	//获取已付款
+	public Project getpropaymoney(int proId) throws SQLException;
+	//修改已付款
+	public void updatepropaymoney(int proId,float money);
 }

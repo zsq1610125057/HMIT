@@ -8,7 +8,28 @@ private String invType;
 private String invDate;
 private String invRemarks;
 private int proId;
+private float proMoney;
+private String proName;
+private float remainingSum;
 
+public float getRemainingSum() {
+	return remainingSum;
+}
+public void setRemainingSum(float remainingSum) {
+	this.remainingSum = remainingSum;
+}
+public String getProName() {
+	return proName;
+}
+public void setProName(String proName) {
+	this.proName = proName;
+}
+public float getProMoney() {
+	return proMoney;
+}
+public void setProMoney(float proMoney) {
+	this.proMoney = proMoney;
+}
 public String getInvId() {
 	return invId;
 }

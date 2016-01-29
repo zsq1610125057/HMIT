@@ -9,6 +9,12 @@ insert into paymenthistory(ordId,paidMoney,paidDate,payRemarks,pWName) values(#o
   ]]>
   
 </insert>
+<insert id="addproPay" parameterClass="com.vos.Paymenthistory">
+<![CDATA[
+insert into paymenthistory(proId,paidMoney,paidDate,payRemarks,pWName) values(#proId#,#paidMoney#,str_to_date(#paidDate#,'%m/%d/%Y'),#payRemarks#,#payWay#) 
+  ]]>
+  
+</insert>
 <insert id="addpro" parameterClass="com.vos.Paymenthistory">
 <![CDATA[
   insert into paymenthistory(proId,paidMoney,paidDate,payRemarks,remainingSum) values(#proId#,#paidMoney#,str_to_date(#paidDate#,'%m/%d/%Y'),#payRemarks#,#remainingSum#) 
@@ -16,7 +22,15 @@ insert into paymenthistory(ordId,paidMoney,paidDate,payRemarks,pWName) values(#o
 </insert>
 <select id="getOrderHistory" resultClass="com.vos.Paymenthistory" parameterClass="java.util.Map">
  <![CDATA[
- select pHId,ordId,paidMoney,paidDate,pWName from paymenthistory where ordId =#ordId#
+ select PaidMoney,PaidDate,PayRemarks,PWName from paymenthistory 
    ]]>
+   <dynamic prepend="WHERE">
+   <isNotEmpty prepend="AND" property="ordId">  
+   <![CDATA[(ordId = #ordId#) ]]>      
+   </isNotEmpty>
+  <isNotEmpty prepend="AND" property="proId">  
+   <![CDATA[(proId = #proId#) ]]>      
+   </isNotEmpty>
+   </dynamic>
 </select>
 </sqlMap>

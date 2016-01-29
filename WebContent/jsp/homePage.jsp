@@ -42,12 +42,18 @@
 						},{"menuid":"4","icon":"icon-sys","menuname":"员工管理",
 							"menus":[{"menuname":"员工管理","icon":"icon-nav","url":"employee/employee.jsp"},
 								]
-						},{"menuid":"5","icon":"icon-sys","menuname":"报表",
+						},{"menuid":"5","icon":"icon-sys","menuname":"发票管理",
+							"menus":[{"menuname":"发票管理","icon":"icon-nav","url":"invoice/invoice.jsp"},
+								]
+						},{"menuid":"6","icon":"icon-sys","menuname":"合同管理",
+							"menus":[{"menuname":"合同管理","icon":"icon-nav","url":"contract/contract.jsp"},
+								]
+						},{"menuid":"7","icon":"icon-sys","menuname":"报表",
 							"menus":[{"menuname":"项目报表","icon":"icon-nav","url":"#"},
 									{"menuname":"营业额报表","icon":"icon-nav","url":"#"},
 									{"menuname":"采购报表","icon":"icon-nav","url":"#"}	
 								]
-						},{"menuid":"6","icon":"icon-sys","menuname":"设置",
+						},{"menuid":"8","icon":"icon-sys","menuname":"设置",
 							"menus":[{"menuname":"权限设置","icon":"icon-nav","url":"#"},
 									{"menuname":"个人信息设置","icon":"icon-nav","url":"#"}
 								]

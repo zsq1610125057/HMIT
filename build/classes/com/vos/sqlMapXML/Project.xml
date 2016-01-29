@@ -231,4 +231,71 @@
 			insert into tender(TdProject,TdEmployee,TdPlace,ComName,TdDate) values(#tdProject#,#tdEmployee#,#tdPlace#,#comName#,str_to_date(#tdDate#, '%Y-%m-%d'))
 			]]>
 	</insert> 
+	
+	<select id="getAllInvoice" resultClass="com.vos.Invoice" parameterClass="java.util.Map">
+	<![CDATA[
+		select invContent,invId,invMoney,invDate,invType,proId from Invoice
+	]]>
+		<dynamic prepend="WHERE">
+			 <isNotNull prepend="AND" property="invType">       
+                  (invType like '%$invType$%')       
+            </isNotNull>
+            <isNotNull prepend="AND" property="invDate">       
+                  (invDate like '%$invDate$%')       
+            </isNotNull>
+             <isNotEmpty prepend="AND" property="beginMoney">  
+             <![CDATA[     
+                  (invMoney >= #beginMoney#) 
+                  ]]>      
+            </isNotEmpty>
+             <isNotEmpty prepend="AND" property="endMoney">    
+             <![CDATA[   
+                  (invMoney <= #endMoney#) 
+                  ]]>      
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="proId">       
+                  (proId = #proId#)       
+            </isNotEmpty>          
+		</dynamic>		
+		limit #firstRow#,#pageSize#
+	</select>
+	
+	<select id="getInvoiceCount" resultClass="java.lang.Integer" parameterClass="com.vos.InvSearchVO">
+	<![CDATA[
+		select count(*) from Invoice 
+		]]>
+	
+	</select>
+	
+	<select id="getContract" resultClass="com.vos.Contract" parameterClass="java.util.Map">
+	<![CDATA[
+		select * from Contract
+	]]>	
+	
+		limit #firstRow#,#pageSize#
+		
+	</select>
+	<select id="getContractCount" resultClass="java.lang.Integer" parameterClass="com.vos.ContractVO">
+	<![CDATA[
+		select count(*) from contract 
+		]]>		
+	</select>
+	
+	
+			<insert id="addContract" parameterClass="com.vos.Contract">
+	<![CDATA[				  
+			insert into contract(contId,cusId,fileDate,signDate,contMoney) values(#contId#,#cusId#,#fileDate#,#signDate#,#contMoney#)
+			]]>
+	</insert> 
+		<update id="editContract" parameterClass="com.vos.Contract">
+		<![CDATA[
+			update contract set cusId=#cusId#,fileDate=#fileDate#,
+			signDate=#signDate#,contMoney=#contMoney# where contId = #contId#
+		]]>
+	</update>
+		<delete id="deleteContract" parameterClass="java.lang.Integer">
+		<![CDATA[
+			delete from contract where contId = #contId#
+		]]>
+		</delete>
 </sqlMap>

@@ -11,8 +11,11 @@ import sun.jdbc.odbc.OdbcDef;
 import com.dao.ProjectDao;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.util.HmitUtil;
+import com.vos.Contract;
+import com.vos.ContractVO;
 import com.vos.Customer;
 import com.vos.Employees;
+import com.vos.InvSearchVO;
 import com.vos.Invoice;
 import com.vos.Order;
 import com.vos.OrderVO;
@@ -60,6 +63,7 @@ public class ProjectDaoImp implements ProjectDao {
 		}
 		return null;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Employees> getProBrokeragList() throws SQLException {
 		// TODO Auto-generated method stub
@@ -71,6 +75,7 @@ public class ProjectDaoImp implements ProjectDao {
 		}
 		return null;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Supplier> getSupplierList() throws SQLException {
 		// TODO Auto-generated method stub
@@ -82,6 +87,7 @@ public class ProjectDaoImp implements ProjectDao {
 		}
 		return null;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PayTypeVo> getPayWayList() throws SQLException {
 		// TODO Auto-generated method stub
@@ -197,6 +203,7 @@ public class ProjectDaoImp implements ProjectDao {
 	public void addInvoice(Invoice invoice) throws SQLException {
 		sqlMapClient.insert("addInv", invoice);
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Project> getProjectAllNameList() throws SQLException {
 		List<Project> list = null;
@@ -385,5 +392,77 @@ public List<Project> getProInfoList(int id) throws SQLException {
 public void addTender(Tender tender) throws SQLException {
 	// TODO Auto-generated method stub
 	sqlMapClient.insert("addTender",tender);
+}
+@SuppressWarnings("unchecked")
+@Override
+public List<Invoice> getAllInvoice(int firstRow, Integer pageSize,
+		InvSearchVO invSearchVO) throws SQLException {
+	try{
+		Map<String,Object> map = new HashMap<String, Object>();
+		List<Invoice> list = new ArrayList<Invoice>();
+		map.put("invType", invSearchVO.getInvType());
+		map.put("invDate", invSearchVO.getInvDate());
+		map.put("beginMoney", invSearchVO.getBeginMoney());
+		map.put("endMoney", invSearchVO.getEndMoney());
+		map.put("proId", invSearchVO.getProName());
+		map.put("firstRow",firstRow);
+		map.put("pageSize",pageSize);
+		
+		list = sqlMapClient.queryForList("getAllInvoice",map);
+		return list;
+
+	}catch(SQLException e) {
+		e.printStackTrace();
+		throw e;
+	}
+	// TODO Auto-generated method stub
+}
+@Override
+public int getInvoiceCount(InvSearchVO invSearchVO) throws SQLException {
+	// TODO Auto-generated method stub
+	int in=(Integer) sqlMapClient.queryForObject("getInvoiceCount",invSearchVO);
+	return in;
+}
+@SuppressWarnings("unchecked")
+@Override
+public List<Contract> getContract(int firstRow, Integer pageSize,
+		ContractVO contractVO) throws SQLException {
+	try{
+		Map<String,Object> map = new HashMap<String, Object>();
+		List<Contract> list = new ArrayList<Contract>();
+	    map.put("contId",contractVO.getContId());
+		map.put("beginDate",contractVO.getBeginDate());
+		map.put("endDate",contractVO.getEndDate());
+		map.put("firstRow",firstRow);
+		map.put("pageSize",pageSize);
+		list = sqlMapClient.queryForList("getContract",map);
+		System.out.println("我擦"+list);
+		return list;
+
+	}catch(SQLException e) {
+		e.printStackTrace();
+		throw e;
+	}
+	// TODO Auto-generated method stub
+}
+@Override
+public int getContractCount(ContractVO contractVO) throws SQLException {
+	// TODO Auto-generated method stub
+	return (Integer) sqlMapClient.queryForObject("getContractCount",contractVO);
+}
+@Override
+public void addContract(Contract contract) throws SQLException {
+	// TODO Auto-generated method stub
+	sqlMapClient.insert("addContract",contract);
+}
+@Override
+public void editContract(Contract contract) throws SQLException {
+	// TODO Auto-generated method stub
+	sqlMapClient.insert("editContract",contract);
+}
+@Override
+public void deleteContract(int contId) throws SQLException {
+	// TODO Auto-generated method stub
+	sqlMapClient.delete("deleteContract",contId);
 }
 }

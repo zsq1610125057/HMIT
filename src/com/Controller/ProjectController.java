@@ -28,6 +28,8 @@ import com.service.ProjectService;
 import com.service.SupplierService;
 import com.service.WarehousemanagementService;
 import com.util.HmitUtil;
+import com.vos.Contract;
+import com.vos.ContractVO;
 import com.vos.CusSearchVO;
 import com.vos.Customer;
 import com.vos.Invoice;
@@ -36,6 +38,8 @@ import com.vos.Order;
 import com.vos.ProSearchVO;
 import com.vos.Project;
 import com.vos.Schedule;
+import com.vos.SupSearchVO;
+import com.vos.Supplier;
 import com.vos.Tender;
 import com.vos.Warehousemanagement;
 
@@ -243,5 +247,106 @@ public class ProjectController {
 			}
 
 	}
+		
+		//合同
+		@RequestMapping("/getContract")
+		@ResponseBody
+		public Map<String, Object> getContract(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber,HttpServletResponse response,@ModelAttribute ContractVO contractVO) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<Contract> pageList = new ArrayList<Contract>();
+			int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
+			int intPageSize=pageSize==null||pageSize<=0?10:pageSize;
+			int firstRow = (pageNumber - 1) * pageSize;
+			try {
+				pageList = projectService.getContract(firstRow, pageSize,contractVO);
+				System.out.println("1111"+pageList);
+				int count = projectService.getContractCount(contractVO);
+				map.put("rows", pageList);
+				map.put("total", count);
+				return map;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				map.put("error", false);
+			}
+			return null;
+			
+		}
+
+		//增加合同
+		@RequestMapping("/addContract")
+		@ResponseBody
+		public void addContract(@RequestParam("data") String cont,HttpServletRequest request,
+				HttpServletResponse response) throws Exception {
+			
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+				cont = URLDecoder.decode(cont, "UTF-8");
+				Contract contract = (Contract) JSONObject.toBean(JSONObject.fromObject(cont), Contract.class);
+				projectService.addContract(contract);
+				JsonResult jr = new JsonResult();
+				jr.setMsg("添加合同信息成功！");
+				jr.setResult(CREATE_NEW_SUCCESS_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				JsonResult jr = new JsonResult();
+				jr.setMsg("添加合同信息失败！");
+				jr.setResult(CREATE_NEW_ERROR_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			}
+
+	}
+		//修改合同
+		@RequestMapping("/editContract")
+		@ResponseBody
+		public void editContract(@RequestParam("data") String cont, @RequestParam("contId") int contId,HttpServletResponse response) throws Exception {
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();	
+				cont = URLDecoder.decode(cont, "UTF-8");
+				Contract contract = (Contract) JSONObject.toBean(JSONObject.fromObject(cont), Contract.class);
+				//System.out.println("供应商id"+supId);
+				contract.setContId(contId);			
+				projectService.editContract(contract);
+				JsonResult jr = new JsonResult();
+				jr.setMsg("修改合同信息成功！");
+				jr.setResult(CREATE_NEW_SUCCESS_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				JsonResult jr = new JsonResult();
+				jr.setMsg("修改合同信息失败！");
+				jr.setResult(CREATE_NEW_ERROR_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			}
+		}
+		//删除合同
+		@RequestMapping("/deleteContract")
+		@ResponseBody
+		public void deleteContract(@RequestParam("contId") int contId,
+				HttpServletResponse response) throws Exception {
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+			projectService.deleteContract(contId);
+				JsonResult jr = new JsonResult();
+				jr.setMsg(CREATE_NEW_SUCCESS_CUSTOMER_MSG);
+				jr.setResult(CREATE_NEW_SUCCESS_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				JsonResult jr = new JsonResult();
+				jr.setResult(CREATE_NEW_ERROR_PROJECT_RESULT);
+				JSONObject json = JSONObject.fromObject(jr);
+				pw.print(json.toString());
+			}
+		}
 
 }

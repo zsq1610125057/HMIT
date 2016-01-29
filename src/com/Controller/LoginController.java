@@ -47,6 +47,7 @@ import com.util.HmitUtil;
 import com.vos.CusSearchVO;
 import com.vos.Customer;
 import com.vos.Employees;
+import com.vos.InvSearchVO;
 import com.vos.Invoice;
 import com.vos.JsonResult;
 import com.vos.Order;
@@ -331,7 +332,29 @@ System.out.println("11"+supplier.getSupId());
 		}
 		
 	}
-	
+	@RequestMapping("/getAllInvoice")
+	@ResponseBody
+	public Map<String, Object> getAllInvoice(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber,HttpServletResponse response,@ModelAttribute InvSearchVO invSearchVO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Invoice> pageList = new ArrayList<Invoice>();
+		int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
+		int intPageSize=pageSize==null||pageSize<=0?10:pageSize;
+		int firstRow = (pageNumber - 1) * pageSize;
+		try {
+			//list = customerService.getAllCustomer();
+			pageList = projectService.getAllInvoice(firstRow, pageSize,invSearchVO);
+			int count = projectService.getInvoiceCount(invSearchVO);
+			map.put("rows", pageList);
+			map.put("total", count);
+			return map;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			map.put("error", false);
+		}
+		return null;
+		
+	}
 	@RequestMapping("/getAllCustomer")
 	@ResponseBody
 	public Map<String, Object> getAllCustomer(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber,HttpServletResponse response,@ModelAttribute CusSearchVO cusSearchVO) {

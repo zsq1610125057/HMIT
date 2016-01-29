@@ -3,9 +3,12 @@ package com.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.vos.Contract;
+import com.vos.ContractVO;
 import com.vos.CusSearchVO;
 import com.vos.Customer;
 import com.vos.Employees;
+import com.vos.InvSearchVO;
 import com.vos.Invoice;
 import com.vos.Order;
 import com.vos.OrderVO;
@@ -82,4 +85,14 @@ public interface ProjectService {
 	//到期账款
 	public List<Project> getMaturityMoneyList() throws SQLException;
 	public void addTender(Tender tender) throws SQLException;
+	//发票
+    public List<Invoice> getAllInvoice(int firstRow, Integer pageSize,InvSearchVO invSearchVO) throws SQLException;
+    public int getInvoiceCount(InvSearchVO invSearchVO) throws SQLException;
+    //合同
+    public List<Contract> getContract(int firstRow, Integer pageSize,ContractVO contractVO) throws SQLException;   
+    public int getContractCount(ContractVO contractVO) throws SQLException;
+    
+    public void addContract(Contract contract) throws SQLException;
+	public void editContract(Contract contract) throws SQLException;
+	public void deleteContract(int contId) throws SQLException;
 }

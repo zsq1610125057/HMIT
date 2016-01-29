@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dao.ProjectDao;
 import com.service.ProjectService;
+import com.vos.Contract;
+import com.vos.ContractVO;
 import com.vos.Customer;
 import com.vos.Employees;
+import com.vos.InvSearchVO;
 import com.vos.Invoice;
 import com.vos.Order;
 import com.vos.OrderVO;
@@ -161,6 +164,17 @@ public class ProjectServiceImp implements ProjectService {
 		return projectDao.getProjectCount(proSearchVO);
 	}
 	@Override
+	public List<Invoice> getAllInvoice(int firstRow, Integer pageSize,
+			InvSearchVO invSearchVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getAllInvoice(firstRow,pageSize,invSearchVO);
+	}
+	@Override
+	public int getInvoiceCount(InvSearchVO invSearchVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getInvoiceCount(invSearchVO);
+	}
+	@Override
 	public void updateProjectStatus(int id, String action) throws SQLException {
 		
 		projectDao.updateProjectStatus(id,action);
@@ -216,4 +230,31 @@ public class ProjectServiceImp implements ProjectService {
 		// TODO Auto-generated method stub
 		projectDao.addTender(tender);
 	}
+	@Override
+	public List<Contract> getContract(int firstRow, Integer pageSize,
+			ContractVO contractVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getContract(firstRow, pageSize,contractVO);
+	}
+	@Override
+	public int getContractCount(ContractVO contractVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return projectDao.getContractCount(contractVO);
+	}
+	@Override
+	public void addContract(Contract contract) throws SQLException {
+		// TODO Auto-generated method stub
+		projectDao.addContract(contract);
+	}
+	@Override
+	public void editContract(Contract contract) throws SQLException {
+		// TODO Auto-generated method stub
+		projectDao.editContract(contract);
+	}
+	@Override
+	public void deleteContract(int contId) throws SQLException {
+		// TODO Auto-generated method stub
+		projectDao.deleteContract(contId);
+	}
+
 }

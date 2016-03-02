@@ -90,14 +90,13 @@ $(function (){
 		formatter:  function(value,row,index) {		
 
 			if (row.ifInv == '0'&&(row.proMoney-row.payMoney)!=0) {	
-				return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>添加发票</a><br><a href='javascript:void(0);' onclick='payProHis("+index+")'>添加付款信息</a> ";
+				return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>添加发票</a><br><a href='javascript:void(0);' onclick='addpayProHis("+index+")'>添加付款信息</a> ";
 			} else if (row.ifInv == '1'&&(row.proMoney-row.payMoney)!=0) {
 				return "<a href='javascript:void(0);' onclick='addpayProHis("+index+")'>添加付款信息</a> ";
 			}else if (row.ifInv == '0'&&(row.proMoney-row.payMoney)==0) {
 				return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>添加发票</a> ";
 			}else {
-				 return "<a href='javascript:void(0);' onclick='lookpayProHis("+index+")'>查看付款信息</a> ";
-				
+				 return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>查看付款信息</a> ";
 			}
 	}
 	}

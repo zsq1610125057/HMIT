@@ -109,4 +109,6 @@ public interface ProjectService {
 	public Project getpropaymoney(int proId) throws SQLException;
 	//修改已付款
 	public void updatepropaymoney(int proId,float money);
+	//获取excel资源
+	
 }

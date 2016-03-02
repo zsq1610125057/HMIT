@@ -1,10 +1,18 @@
 package com.Controller;
 
+import java.awt.FileDialog;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +20,26 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import sun.jdbc.odbc.OdbcDef;
 
 import com.service.CustomerService;
 import com.service.EmployeesService;
@@ -47,6 +65,7 @@ import com.vos.Warehousemanagement;
 
 @Controller
 @SessionAttributes
+@RequestMapping("/report") 
 public class ProjectController {
 	public  static final String LOGIN_ERROR_MSG = "服务器出错,请重试";
 	public  static final String SAVE_SUCCESS_MSG = "操作成功";	
@@ -475,4 +494,19 @@ public class ProjectController {
 			}
 
 	}
+        //excel导入数据
+		@RequestMapping("/read" )
+		public void getOrderBtns(HttpServletResponse response,@RequestParam MultipartFile file) throws IOException {
+			System.out.println("获取路径");
+			// List<Order> list = projectService.readReport(file.getInputStream());  
+		       // service.insertComputer(list);  
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			pw.print("{\"result\":" + true + ",\"msg\":\"" + "gdgd"+ "\"}");
+			
+		}
 }

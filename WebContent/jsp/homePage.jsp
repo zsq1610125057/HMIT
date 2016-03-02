@@ -214,7 +214,7 @@
 		style="height: 30px; background: #D2E0F2;">
 		<div class="footer">By 宁波汇民科技有限有限公司 Email:ming.liu@nbhmit.com</div>
 	</div>
-	<div region="west" split="true" title="导航菜单" style="width: 130px;"
+	<div region="west" split="true" title="导航菜单" style="width: 150px;"
 		id="west">
 		<div class="easyui-accordion" fit="true" border="false">
 			<!--  导航内容 -->
@@ -222,8 +222,7 @@
 		</div>
 
 	</div>
-	<div region="east" split="true" title="备忘录" style="width: 190px;"
-		id="east"></div>
+
 	<div id="mainPanle" region="center"
 		style="background: #eee; overflow-y: hidden">
 		<div id="tabs" class="easyui-tabs" fit="true" border="false">

@@ -5,7 +5,7 @@
 <sqlMap>
 	<select id="getAllCustomers" resultClass="com.vos.Customer">
 	<![CDATA[
-		select cusid,comname as compName,address,contact,cusname as cusName from customer 
+		select cusId,comName as compName,address,contact,cusName as cusName from customer 
 	]]>
 	</select>
 	<select id="getProject" resultClass="com.vos.Project" parameterClass="com.vos.ProSearchVO">

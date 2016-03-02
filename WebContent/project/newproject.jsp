@@ -182,6 +182,7 @@
 		      
 
 		  });
+		  
 		$('#addOrderBtn').click(function(){
 			
 			if ($('#orderForm').form("validate")) {
@@ -340,9 +341,9 @@ function deleteOrder(index) {
 // 	return data;
 // }
 </script>
-<body id="main" class="easyui-layout" style="width: 1000px; height: 570px;margin-top:-20px; overflow:visible" >
+<body id="main" class="easyui-layout" style="width: 100%; height: 570px;margin-top:-20px; overflow:visible" >
 	
-	<div region="north"  style="height: 90px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
+	<div region="north"  style="height: 60px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
 			<div title="客户">
 			<form id="customerForm" >
 				<table id="customerForm" class="customerTable datagrid-toobar"
@@ -357,16 +358,10 @@ function deleteOrder(index) {
 						<th>联系方式:</th>
 						<td><input id="contact" type="text"
 							class="easyui-validatebox" name="contact" readonly="readonly"></td>
-
-					</tr>
-					<tr>
 						<th>客户地址：</th>
 						<td><input id="customerAdd" type="text"
 							class="easyui-validatebox" name="customerAdd"
 							style="width: 200px;" readonly="readonly" /></td>
-						<th>业务代表：</th>
-						<td><input id="saler" type="text" name="saler"
-							class="easyui-validatebox" readonly="readonly" /></td>
 						<!-- 					<td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="searchFunc();">查找</a></td> -->
 						<!--                    	<td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="clearSearch();">清空</a></td> 
 						
@@ -393,14 +388,13 @@ function deleteOrder(index) {
 							class="easyui-validatebox" maxlength="50" name="proName"
 							required="true" style="width: 200px;"> <span
 							style="color: red; margin-left: 2px;">*</span></td>
-						<th>项目类型:</th>
-						<td><input id="proType" class="easyui-combobox" type="text"
-							name="proType" required="true" style="width: 100px;"><span
+						<th>项目金额:</th>
+						<td><input id="proMoney" type="text" class="easyui-numberbox"
+							min="1" max="10000000" precision="2" required="true"
+							missingMessage="非法金额" name="proMoney" style="width: 150px;"><span
 							style="color: red; margin-left: 5px;">*</span></td>
-						<th>合同编号:</th>
-						<td><input id="conId" type="text" class="easyui-validatebox"
-							maxlength="20" name="conId" required="true" style="width: 100px;">
-							<span style="color: red; margin-left: 2px;">*</span></td>
+						
+						
 						<!-- 					<th>备注:</th> -->
 						<!-- 					<td rowspan="2"><textarea id="remarks" name="remarks"></textarea></td> -->
 						<th>执行时间:</th>
@@ -408,32 +402,31 @@ function deleteOrder(index) {
 							editable="false" required="true" name="beginDate"
 							style="width: 105px;"><span
 							style="color: red; margin-left: 2px;">*</span></td>
-						<th>备注</th>
-						<td rowspan="2"><textarea id="remarks" name="remarks"
-								style="height: 48px;"></textarea></td>
-					</tr>
-					<tr>
-						<th>项目金额:</th>
-						<td><input id="proMoney" type="text" class="easyui-numberbox"
-							min="1" max="10000000" precision="2" required="true"
-							missingMessage="非法金额" name="proMoney" style="width: 200px;"><span
-							style="color: red; margin-left: 5px;">*</span></td>
-
 						<th>预收日期:</th>
 						<td><input id="recevablesDate" type="text"
 							class="easyui-datebox" name="recevablesDate"
 							style="width: 100px;" required="true" editable="false" /><span
 							style="color: red; margin-left: 5px;">*</span></td>
+						<th>备注</th>
+						<td rowspan="2"><textarea id="remarks" name="remarks"
+								style="height: 48px;"></textarea></td>
+					</tr>
+					<tr>
+						<th>项目类型:</th>
+						<td><input id="proType" class="easyui-combobox" type="text"
+							name="proType"  style="width: 205px;"></td>
+                        <th>合同编号:</th>
+						<td><input id="conId" type="text" class="easyui-validatebox"
+							maxlength="20" name="conId"  style="width: 150px;"></td>
+						
 						<th>签订日期:</th>
 						<td><input id="signDate" type="text" class="easyui-datebox"
-							name="signDate" editable="false" required="true"
-							style="width: 105px;"> <span
-							style="color: red; margin-left: 2px;">*</span></td>
-						<th>经手人:</th>
+							name="signDate" editable="false" 
+							style="width: 105px;"></td>
+						<th>项目经理:</th>
 						<td><input id="proBrokerage" type="text"
-							class="easyui-combobox" name="proBrokerage" required="true"
-							style="width: 100px;"> <span
-							style="color: red; margin-left: 2px;">*</span></td>
+							class="easyui-combobox" name="proBrokerage" 
+							style="width: 100px;"></td>
 
 					</tr>
 					<!--  
@@ -471,7 +464,7 @@ function deleteOrder(index) {
 			-->
 </div>
 	
-	<div  region="south"  style=" height: 360px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
+	<div  region="south"  style=" height: 390px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
 	
 			<div title="设备信息" border='false'>
 			<form id="orderForm">
@@ -535,11 +528,16 @@ function deleteOrder(index) {
 							href="javascript:void(0);" onclick="clear();">重置</a></td>
 					</tr>
 				</table>
-				
+				<form id="readReportForm"  method="post" enctype="multipart/form-data">
+				<label for="file">文件名：</label>
+				<input id="configFile" name="configFile" class="easyui-validatebox" type="text" style="width: 126px; " required="true"/>
+			    <input id="file" name="file" type="file" style="width: 60px;" onchange="document.getElementById('configFile').value=this.value"/>
+                <a id="readReportForma" class="easyui-linkbutton" href="javascript:void(0);">导入</a>
+				</form>
 
 
 		<div id="g" style="margin-top: 3px;" >
-		<table id="dg" class="easyui-datagrid" style="height: 170px;" title="Customer">
+		<table id="dg" class="easyui-datagrid" style="height: 200px;" title="Customer">
 		</table>
 	</div>
 		<div id="saveDive" align="center" style="margin-top: 10px;">

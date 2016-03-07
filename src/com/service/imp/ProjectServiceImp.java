@@ -1,8 +1,19 @@
 package com.service.imp;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +37,9 @@ import com.vos.Supplier;
 import com.vos.Tender;
 @Service
 public class ProjectServiceImp implements ProjectService {
-
+	private static Logger logger = Logger.getLogger("service");
 	private ProjectDao projectDao;
+	private Object computer;
 	public ProjectDao getProjectDao() {
 		return projectDao;
 	}
@@ -291,4 +303,128 @@ public class ProjectServiceImp implements ProjectService {
 		// TODO Auto-generated method stub
 		projectDao.updatepropaymoney( proId, money);
 	}
+	@Override
+	public List<Order> readReport(InputStream inp) {
+		List<Order> orderList = new ArrayList<Order>();  
+		  
+        try {  
+            String cellStr = null;  
+  
+            Workbook wb = WorkbookFactory.create(inp);  
+  
+            Sheet sheet = wb.getSheetAt(0);// 取得第一个sheets  
+  
+            //从第3行开始读取数据  
+            for (int i = 2; i <= sheet.getLastRowNum(); i++) {  
+  
+            	Order order = new Order();  
+            	Order addOrder = new Order();  
+  
+                Row row = sheet.getRow(i); // 获取行(row)对象  
+  
+                if (row == null) {  
+                    // row为空的话,不处理  
+                    continue;  
+                }  
+  
+                for (int j = 0; j < row.getLastCellNum(); j++) {  
+  
+                    Cell cell = row.getCell(j); // 获得单元格(cell)对象  
+  
+                    // 转换接收的单元格  
+                    cellStr = ConvertCellStr(cell, cellStr);  
+  
+                    // 将单元格的数据添加至一个对象  
+                    addOrder = addingOrder(j, order, cellStr);  
+  
+                }  
+                // 将添加数据后的对象填充至list中  
+                orderList.add(addOrder);  
+            }  
+  
+        } catch (InvalidFormatException e) {  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (inp != null) {  
+                try {  
+                    inp.close();  
+                } catch (IOException e) {  
+                    e.printStackTrace();  
+                }  
+            } else {  
+                logger.info("没有数据流!");  
+            }  
+        }  
+        return orderList;  
+  
+    }  
+	private Order addingOrder(int j, Order order, String cellStr) {  
+        switch (j) {
+        case 0:
+        	order.setOrdId(0);
+        	break;
+        case 1:  
+            order.setEquName(cellStr);  
+            break;  
+        case 2: 
+        	cellStr=cellStr.substring(0,cellStr.indexOf("."));
+        	order.setEquNumber(Integer.parseInt(cellStr));  
+            break;  
+        case 3:  
+        	order.setEquDescription(cellStr);  
+            break;  
+        case 4:     	
+        	order.setSellPrice(Float.parseFloat(cellStr));  
+            break;  
+        case 5: 
+        	order.setSellTotalPrice(Float.parseFloat(cellStr)); 
+            break;  
+        case 6: 
+        	order.setRemarks(cellStr);  
+            break;  
+        }  
+  
+        return order;  
+    }  
+	  /** 
+     * 把单元格内的类型转换至String类型 
+     */  
+    private String ConvertCellStr(Cell cell, String cellStr) {  
+  
+        switch (cell.getCellType()) {  
+  
+        case Cell.CELL_TYPE_STRING:  
+            // 读取String  
+            cellStr = cell.getStringCellValue().toString();  
+            break;  
+  
+        case Cell.CELL_TYPE_BOOLEAN:  
+            // 得到Boolean对象的方法  
+            cellStr = String.valueOf(cell.getBooleanCellValue());  
+            break;  
+  
+        case Cell.CELL_TYPE_NUMERIC:  
+            // 先看是否是日期格式  
+            if (DateUtil.isCellDateFormatted(cell)) {  
+  
+                // 读取日期格式  
+                cellStr = cell.getDateCellValue().toString();  
+  
+            } else {  
+            	
+                // 读取数字  
+                cellStr = String.valueOf(cell.getNumericCellValue()); 
+            }  
+            break;  
+  
+        case Cell.CELL_TYPE_FORMULA:  
+            // 读取公式  
+        	
+            cellStr = cell.getCellFormula().toString();  
+            break;  
+        }  
+        return cellStr;  
+    }  
 }

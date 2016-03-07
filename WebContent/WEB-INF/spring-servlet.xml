@@ -53,5 +53,10 @@
 			</list>
 		</property>
 	</bean>
-
+ <!-- Spring分段文件上传所必须的 ,用于检查请求中是否包含multipart  
+    see: http://www.html.org.cn/books/springReference/ch13s08.html  
+    -->  
+    <bean id="multipartResolver"  
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:maxUploadSize="5000000"  
+     />  
 </beans>

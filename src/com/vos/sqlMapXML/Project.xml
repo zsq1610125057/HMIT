@@ -165,8 +165,8 @@
 	<select id="getOrderListByPager" resultClass="com.vos.Order"
 		parameterClass="java.util.Map">
 			<![CDATA[
-				select payables,invId,equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName from (SELECT
-					
+				select payables,invId,equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName from (
+				SELECT	
 					IFNULL(po.payables,"") AS payables,
 					po.InvId AS invId,
 					po.EquDescription AS equDescription,
@@ -187,18 +187,20 @@
 					project AS pt]]>
 					<dynamic prepend="WHERE">
 					<![CDATA[po.ProId = pt.ProId]]>
+					 <isParameterPresent>
                    <isNotEmpty prepend="AND" property="proId">       
-                     <![CDATA[and po.ProId =#proId#]]>    
+                    and  po.ProId =#proId#   
                  </isNotEmpty> 
                  <isNotEmpty prepend="AND" property="equName">       
-                     <![CDATA[and po.EquName =#equName#]]>    
+                    and  po.EquName =#equName#   
                  </isNotEmpty> 
                  <isNotEmpty prepend="AND" property="status">       
-                     <![CDATA[and po.status =#status#]]>    
+                    and  po.status =#status#  
                  </isNotEmpty> 
                  <isNotEmpty prepend="AND" property="supId">       
-                     <![CDATA[and po.SupId =#supId#]]>    
-                 </isNotEmpty>          
+                    and  po.SupId =#supId#   
+                 </isNotEmpty> 
+                 </isParameterPresent>         
 		          </dynamic>		
 					
 					  ) a LEFT JOIN supplier s on a.SupId = s.SupId limit #beginRow#,#pageSize#

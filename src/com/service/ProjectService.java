@@ -1,5 +1,6 @@
 package com.service;
 
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -110,5 +111,5 @@ public interface ProjectService {
 	//修改已付款
 	public void updatepropaymoney(int proId,float money);
 	//获取excel资源
-	
+	public List<Order> readReport(InputStream inp);
 }

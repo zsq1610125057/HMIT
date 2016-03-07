@@ -65,7 +65,7 @@ import com.vos.Warehousemanagement;
 
 @Controller
 @SessionAttributes
-@RequestMapping("/report") 
+
 public class ProjectController {
 	public  static final String LOGIN_ERROR_MSG = "服务器出错,请重试";
 	public  static final String SAVE_SUCCESS_MSG = "操作成功";	
@@ -494,19 +494,14 @@ public class ProjectController {
 			}
 
 	}
-        //excel导入数据
-		@RequestMapping("/read" )
-		public void getOrderBtns(HttpServletResponse response,@RequestParam MultipartFile file) throws IOException {
-			System.out.println("获取路径");
-			// List<Order> list = projectService.readReport(file.getInputStream());  
-		       // service.insertComputer(list);  
-			PrintWriter pw = null;
-			try {
-				pw = response.getWriter();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			pw.print("{\"result\":" + true + ",\"msg\":\"" + "gdgd"+ "\"}");
-			
-		}
+    //导入excel
+		 @RequestMapping("/readReport")  
+		 @ResponseBody
+		    public Map<String, Object> getReadReport(@RequestParam MultipartFile file,HttpServletResponse response)  
+		            throws IOException {
+			 Map<String, Object> map = new HashMap<String, Object>();
+		      List<Order> list = projectService.readReport(file.getInputStream()); 
+		      map.put("rows", list);     
+		       return map;
+		    }  
 }

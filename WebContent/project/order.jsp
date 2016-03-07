@@ -48,7 +48,7 @@ $(function (){
 		field: 'equName', title: '设备名称', width: 80
 	},
 	{
-		field: 'equDescription', title: '设备描述', width: 200	
+		field: 'equDescription', title: '品牌型号', width: 200	
 	},
 	{
 	field: 'equNumber', title: '数量', width: 40, sortable: true
@@ -273,9 +273,29 @@ $(function (){
 
 	      textField:'proName',
 	      
-	      editable : false,
+	      editable : true,
 	      
 	      method : 'get',
+	      required : true,
+	      filter : function(q,row) {
+	      		var opts = $(this).combobox('options');
+	      		//alert(row[opts.textField].indexOf(q));
+	      		return row[opts.textField].indexOf(q) > -1;
+	      },
+	      onHidePanel : function() {
+	    	  var txt_Box = $("#proId2").combobox('getText');
+              var listdata = $.data(this, "combobox");
+              var rowdata = listdata.data;
+                for (var i = 0; i < rowdata.length; i++) {
+                    var _row = rowdata[i];
+                    var txt_Val = _row["proName"];
+                    if (txt_Val.toLowerCase().indexOf(txt_Box.toLowerCase()) > -1) {
+                        $("#proId2").combobox('setText', _row["proName"]);
+                        $("#proId2").val(_row["proName"]);
+                        return;
+                    }
+                }
+	      }
 	  });
 	$('#supId').combobox({   
 
@@ -285,9 +305,24 @@ $(function (){
 
 	      textField:'supName',
 	      
-	      editable : false,
+	      editable : true,
 	      
 	      method : 'get',
+	      required : true,
+	      onHidePanel : function() {
+	    	  var txt_Box = $("#supId").combobox('getText');
+              var listdata = $.data(this, "combobox");
+              var rowdata = listdata.data;
+                for (var i = 0; i < rowdata.length; i++) {
+                    var _row = rowdata[i];
+                    var txt_Val = _row["supName"];
+                    if (txt_Val.toLowerCase().indexOf(txt_Box.toLowerCase()) > -1) {
+                        $("#supId").combobox('setText', _row["supName"]);
+                        $("#supId").val(_row["supName"]);
+                        return;
+                    }
+                }
+	      }
 	  });
 	//加载表格
 	$('#dg1').datagrid(
@@ -766,12 +801,12 @@ function searchOrder() {
 					
                         <th>厂商:</th>
 						<td><input id="supId" type="text"
-				style="width: 145px;" class="easyui-combobox" name="supId"  editable="false" />
+				style="width: 145px;" class="easyui-combobox" name="supId"  />
 					</tr>
 					<tr>
 						<th>项目名称:</th>
 						<td><input id="proId2" type="text"
-				style="width: 145px;" class="easyui-combobox" name="proId"  editable="false" />
+				style="width: 145px;" class="easyui-combobox" name="proId"  />
                         <th>状态:</th>
 						<td><input class="easyui-validatebox" id="brand" type="text" name="status"></td>
 						<td><a class="easyui-linkbutton" onclick="searchOrder();">查找</a></td>

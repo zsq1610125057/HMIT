@@ -1,3 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -34,7 +37,7 @@
 					
 				},
 				{
-					title:'设备描述',
+					title:'品牌型号',
 					field:'equDescription',
 					width:50
 				},
@@ -55,9 +58,9 @@
 					width:25
 				},
 				{
-					title:'备注',
+					title:'配置描述',
 					field : 'remarks',
-					width : 20
+					width : 100
 				},
 				{
 					title:'批发',
@@ -83,7 +86,7 @@
 			]]
 	
 		});	
-		$('#dg').datagrid('hideColumn','remarks');
+		//$('#dg').datagrid('hideColumn','remarks');
 		  $('#customerComp').combobox({   
 
 		      url:'<%=basePath%>getCustomerList',
@@ -183,29 +186,40 @@
 
 		  });
 		  
+			$('#readReportForm').form({
+				url : '<%=basePath%>readReport',
+				onSubmit: function(){
+					return $('#readReportForm').form('validate');
+				},
+				success : function(data) {
+					var obj=$.parseJSON(data);		
+					$('#dg').datagrid("loadData",obj);
+					
+				}
+			});
+		 $('#readReportForma').click(function(){			
+			 var file = $('#file').val();
+				if (file == null || file == "") {
+					$.messager.alert('操作提示', "请选择导入文件","info");
+					return false;
+				} else if (file.replace(/.+\./,"") != "xls" && file.replace(/.+\./,"") != "xlsx") {
+					$.messager.alert('操作提示', "导入文件类型错误","info");
+					$('#file').val('');
+					return false;
+				} else {
+					//$('#dg').datagrid("loading");
+					$('#readReportForm').submit();				 
+				};	
+
+		 });  
 		$('#addOrderBtn').click(function(){
 			
 			if ($('#orderForm').form("validate")) {
-// 				var price = $('#costUnitPrice').val();
-// 				var number = $('#equNumber').val();
-// 				var totalIn = $('#costPrice').val();
-// 				var totalOut = $('#sellTotalPrice').val();
-// 				if (totalIn != price*number) {
-// 					$.messager.alert('操作提示', '进项总价有误', 'error');
-// 					return;
-// 				}
-// 				if ((totalOut - totalIn) <= 0) {
-// 					$.messager.alert('操作提示', '销项总价不得低于进项总价', 'error');
-// 					return;
-// 				}
-				var data = sy.serializeObject($("#orderForm").form());
-				//data.supName =  $('#supId').combobox('getText');
-				
+				var data = sy.serializeObject($("#orderForm").form());		
 				var row = JSON.stringify(data);	
 				$('#dg').datagrid('appendRow',JSON.parse(row));
 				$('#orderForm').form("clear");
 				$('#dg').datagrid('load');
-				//$('#dg').datagrid({loadFilter:pagerFilter}).datagrid();
 				
 			}
 		});
@@ -237,115 +251,83 @@
 					type : "POST",
 					dataType : "json",
 					data : "data=" + proData+ '=' + ordData,
-					url:"<%=basePath%>createNewProject?cusId="+ cusId,
-					success:function(jr) {
-						$.messager.alert('操作提示', jr.msg, jr.result);
-						$("#projectForm").form('clear');  
-						$("#customerForm").form('clear');
-						$("#orderForm").form('clear');
-			            var item = $('#dg').datagrid('getRows');
-			            if (item) {
-			                for (var i = item.length - 1; i >= 0; i--) {
-			                    var index = $('#dg').datagrid('getRowIndex', item[i]);
-			                    $('#dg').datagrid('deleteRow', index);
-			                }
-			            }
-			            $('#dg').datagrid('loadData', { total: 0, rows: [] }); 
-					},
-					error:function() {
-						 $.messager.alert('操作提示', '项目创建失败，请重试', 'error');
-				}
-			});
-			}
-			//var customer = $('#customerComp').combobox('getValue');
+					url:"<%=basePath%>createNewProject?cusId="
+													+ cusId,
+											success : function(jr) {
+												$.messager.alert('操作提示',
+														jr.msg, jr.result);
+												$("#projectForm").form('clear');
+												$("#customerForm")
+														.form('clear');
+												$("#orderForm").form('clear');
+												var item = $('#dg').datagrid(
+														'getRows');
+												if (item) {
+													for (var i = item.length - 1; i >= 0; i--) {
+														var index = $('#dg')
+																.datagrid(
+																		'getRowIndex',
+																		item[i]);
+														$('#dg').datagrid(
+																'deleteRow',
+																index);
+													}
+												}
+												$('#dg').datagrid('loadData', {
+													total : 0,
+													rows : []
+												});
+											},
+											error : function() {
+												$.messager.alert('操作提示',
+														'项目创建失败，请重试', 'error');
+											}
+										});
+							}
+							//var customer = $('#customerComp').combobox('getValue');
 
-			
-		});
-		
-// 		 var pager = $("#dg").datagrid("getPager"); 
-// 	      pager.pagination({ 
-// 	          total:$("#dg").datagrid("getData").length , 
-// 	          onSelectPage:function (pageNo, pageSize) { 
-// 	            var start = (pageNo - 1) * pageSize; 
-// 	            var end = start + pageSize; 
-// 	            $("#dg").datagrid("loadData", data.slice(start, end)); 
-// 	            pager.pagination('refresh', { 
-// 	              total:data.length, 
-// 	              pageNumber:pageNo 
-// 	            }); 
-// 	          } 
-// 	        }); 
-});
+						});
+	});
 
-function ifOrder() {
-	//var i = $('#order').is(':checked');
-	//var i = $("input:checkbox[name='order']:checked").val();
-	if($('#order').is(':checked')) {
-		$('#orderDiv').attr("disabled",true);
-	} else {
-	
+	function ifOrder() {
+		//var i = $('#order').is(':checked');
+		//var i = $("input:checkbox[name='order']:checked").val();
+		if ($('#order').is(':checked')) {
+			$('#orderDiv').attr("disabled", true);
+		} else {
+
+		}
 	}
-}
-var sy = $.extend({}, sy);
-sy.serializeObject = function (form) { /*将form表单内的元素序列化为对象，扩展Jquery的一个方法*/
-    var o = {};
-    $.each(form.serializeArray(), function (index) {
-        if (o[this['name']]) {
-            o[this['name']] = o[this['name']] + "," + this['value'];
-        } else {
-            o[this['name']] = this['value'];
-        }
-    });
-    return o;
-};
+	var sy = $.extend({}, sy);
+	sy.serializeObject = function(form) { /*将form表单内的元素序列化为对象，扩展Jquery的一个方法*/
+		var o = {};
+		$.each(form.serializeArray(), function(index) {
+			if (o[this['name']]) {
+				o[this['name']] = o[this['name']] + "," + this['value'];
+			} else {
+				o[this['name']] = this['value'];
+			}
+		});
+		return o;
+	};
 
-function clear(){
-	$('#orderForm').form("clear");
-	
-}
+	function clear() {
+		$('#orderForm').form("clear");
 
-function deleteOrder(index) {
-	$('#dg').datagrid('deleteRow',index);
-	$('#dg').datagrid('unselectAll');
-	
-}
-// function pagerFilter(data){
-// 	alert(data);
-// 	  if (typeof data.length == 'number' && typeof data.splice == 'function'){
-// 	      data = {
-// 	          total: data.length,
-// 	          rows: data,
-// 	          originalTotal: data.length
-// 	      }
-// 	  }
-// 	var dg = ('#dg').datagrid();
-// 	var opts = dg.datagrid('options');
-// 	var pager = dg.datagrid('getPager');
-// 	pager.pagination({
-// 		onSelectPage:function(pageNum, pageSize){
-// 			opts.pageNumber = pageNum;
-// 			opts.pageSize = pageSize;
-// 			pager.pagination('refresh',{
-// 				pageNumber:pageNum,
-// 				pageSize:pageSize
-// 			});
-// 			dg.datagrid('loadData',data);
-// 		}
-// 	});
-// 	if (!data.originalRows){
-// 		data.originalRows = (data.rows);
-// 	}
-// 	var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
-// 	var end = start + parseInt(opts.pageSize);
-// 	data.rows = (data.originalRows.slice(start, end));
-// 	return data;
-// }
+	}
+	function deleteOrder(index) {
+		$('#dg').datagrid('deleteRow', index);
+		$('#dg').datagrid('unselectAll');
+
+	}
 </script>
-<body id="main" class="easyui-layout" style="width: 100%; height: 570px;margin-top:-20px; overflow:visible" >
-	
-	<div region="north"  style="height: 60px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
-			<div title="客户">
-			<form id="customerForm" >
+<body id="main" class="easyui-layout"
+	style="width: 100%; height: 570px; margin-top: -20px; overflow: visible">
+
+	<div region="north" style="height: 60px; background: #F4F4F4;"
+		class="easyui-tabs" border="false">
+		<div title="客户">
+			<form id="customerForm">
 				<table id="customerForm" class="customerTable datagrid-toobar"
 					style="width: 100%; height: 100%">
 					<tr>
@@ -372,14 +354,15 @@ function deleteOrder(index) {
 							-->
 					</tr>
 
-			</table>
-</form>
+				</table>
+			</form>
 
-			</div>
 		</div>
-		
-    <div region="center"  style="height: 120px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
-         <div title="项目">
+	</div>
+
+	<div region="center" style="height: 120px; background: #F4F4F4;"
+		class="easyui-tabs" border="false">
+		<div title="项目">
 			<form id="projectForm">
 				<table id="projectForm" class="customerTable datagrid-toobar">
 					<tr>
@@ -393,8 +376,8 @@ function deleteOrder(index) {
 							min="1" max="10000000" precision="2" required="true"
 							missingMessage="非法金额" name="proMoney" style="width: 150px;"><span
 							style="color: red; margin-left: 5px;">*</span></td>
-						
-						
+
+
 						<!-- 					<th>备注:</th> -->
 						<!-- 					<td rowspan="2"><textarea id="remarks" name="remarks"></textarea></td> -->
 						<th>执行时间:</th>
@@ -414,19 +397,17 @@ function deleteOrder(index) {
 					<tr>
 						<th>项目类型:</th>
 						<td><input id="proType" class="easyui-combobox" type="text"
-							name="proType"  style="width: 205px;"></td>
-                        <th>合同编号:</th>
+							name="proType" style="width: 205px;"></td>
+						<th>合同编号:</th>
 						<td><input id="conId" type="text" class="easyui-validatebox"
-							maxlength="20" name="conId"  style="width: 150px;"></td>
-						
+							maxlength="20" name="conId" style="width: 150px;"></td>
+
 						<th>签订日期:</th>
 						<td><input id="signDate" type="text" class="easyui-datebox"
-							name="signDate" editable="false" 
-							style="width: 105px;"></td>
+							name="signDate" editable="false" style="width: 105px;"></td>
 						<th>项目经理:</th>
 						<td><input id="proBrokerage" type="text"
-							class="easyui-combobox" name="proBrokerage" 
-							style="width: 100px;"></td>
+							class="easyui-combobox" name="proBrokerage" style="width: 100px;"></td>
 
 					</tr>
 					<!--  
@@ -438,22 +419,22 @@ function deleteOrder(index) {
 					-->
 				</table>
 			</form>
-			</div>
-         
-			
-			
-			<!-- 		<div title="合同"> -->
-			<!-- 			<table> -->
+		</div>
 
 
-			<!-- 			</table> -->
-			<!-- 		</div> -->
-			<!-- 		<div title="发票"> -->
-			<!-- 			<table> -->
+
+		<!-- 		<div title="合同"> -->
+		<!-- 			<table> -->
 
 
-			<!-- 			</table> -->
-			<!-- 		</div> -->
+		<!-- 			</table> -->
+		<!-- 		</div> -->
+		<!-- 		<div title="发票"> -->
+		<!-- 			<table> -->
+
+
+		<!-- 			</table> -->
+		<!-- 		</div> -->
 		<!--  
 			<div title="过单">
 				<table>
@@ -462,64 +443,54 @@ function deleteOrder(index) {
 				</table>
 			</div>
 			-->
-</div>
-	
-	<div  region="south"  style=" height: 390px; background: #F4F4F4;"  class="easyui-tabs"  border="false">
-	
-			<div title="设备信息" border='false'>
+	</div>
+
+	<div region="south" style="height: 390px; background: #F4F4F4;"
+		class="easyui-tabs" border="false">
+
+		<div title="设备信息" border='false'>
 			<form id="orderForm">
-				<table id="orderTable" class="customerTable datagrid-toobar"
-					>
+				<table id="orderTable" class="customerTable datagrid-toobar">
 					<tr>
 						<th>设备名称:</th>
 						<td><input id="equName" type="text"
-							class="easyui-validatebox textbox" required="true" name="equName">
+							class="easyui-validatebox textbox" required="true" name="equName"/>
 							<span style="color: red; margin-left: 2px;">*</span></td>
 						<!-- 					<th>成本: </th> -->
 						<!-- 					<td><input id="costUnitPrice" class="easyui-numberbox" type="text" min="1" max="10000000" precision="2" required="true" name="costUnitPrice"><span style="color: red;margin-left: 2px;">*</span></td>	 -->
 						<th>数量:</th>
 						<td><input id="equNumber" class="easyui-numberbox"
-							type="text" required="true" name="equNumber" maxlength="3"><span
+							type="text" required="true" name="equNumber" maxlength="3"/><span
 							style="color: red; margin-left: 2px;">*</span></td>
-						<th>备注:</th>
+						<th>配置描述:</th>
 						<td rowspan="2"><textarea id="remarks"
 								class="easyui-validatebox" name="remarks" style="height: 48px;"
 								placeholder="预计进货单位，价格描述"></textarea></td>
 					</tr>
 					<tr>
-						<th>设备描述:</th>
-						<td rowspan="2"><textarea id="equDescription"
-								name="equDescription" style="height: 48px;"></textarea></td>
-
-						<!-- 					<th>供应商: </th> -->
-						<!-- 					<td><input id=supId type="text" class="easyui-combobox" required="true" style="width:138px;" name="supId" ><span style="color: red;margin-left: 5px;">*</span></td>	 -->
-
-						<!-- 					<th>付款方式:</th> -->
-						<!-- 					<td><input id="payWay" type="text" class="easyui-combobox" required="true" style="width:138px;" name="payWay"/><span style="color: red;margin-left: 5px;">*</span></td> -->
-						<!-- 					<th>付款时间:</th> -->
-						<!-- 					<td><input id="payDate" type="text" class="easyui-datebox" required="true" name="payDate" editable="false"/><span style="color: red;margin-left: 5px;">*</span></td> -->
-
-						<!-- 					<td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="searchFunc();">查找</a></td> -->
-						<!--                    	<td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="clearSearch();">清空</a></td> -->
+						<th>品牌型号:</th>
+						<td><input id="equDescription" type="text"
+							class="easyui-validatebox textbox" required="true" name="equDescription"/>
+							<span style="color: red; margin-left: 2px;">*</span></td>
 						<th>销售单价:</th>
 						<td><input id="sellPrice" type="text" min="1" max="10000000"
 							precision="2" required="true" missingMessage="非法金额"
 							class="easyui-numberbox" name="sellPrice"><span
-							style="color: red; margin-left: 5px;">*</span></td>
+							style="color: red; margin-left: 5px;">*(万元)</span></td>
 
 
 
 					</tr>
 					<tr>
-						<td><input id="ifWholeSale" type="checkbox" value="1"
-							name="ifWholeSale" /><b>批发</b></td>
+						
 						<th>销售总价:</th>
 						<td><input id="sellTotalPrice" type="text" min="1"
 							max="10000000" precision="2" required="true"
 							missingMessage="非法金额" class="easyui-numberbox"
 							name="sellTotalPrice"><span
-							style="color: red; margin-left: 5px;">*</span></td>
-
+							style="color: red; margin-left: 5px;">*(万元)</span></td>
+                        <td><input id="ifWholeSale" type="checkbox" value="1"
+							name="ifWholeSale" /><b>批发</b></td>
 					</tr>
 					<tr>
 						<td colspan="2"><a id="addOrderBtn" class="easyui-linkbutton"
@@ -527,33 +498,32 @@ function deleteOrder(index) {
 							id="clearBtn" class="easyui-linkbutton" icon="icon-cancel"
 							href="javascript:void(0);" onclick="clear();">重置</a></td>
 					</tr>
-				</table>
-				<form id="readReportForm"  method="post" enctype="multipart/form-data">
-				<label for="file">文件名：</label>
-				<input id="configFile" name="configFile" class="easyui-validatebox" type="text" style="width: 126px; " required="true"/>
-			    <input id="file" name="file" type="file" style="width: 60px;" onchange="document.getElementById('configFile').value=this.value"/>
-                <a id="readReportForma" class="easyui-linkbutton" href="javascript:void(0);">导入</a>
+				</table>	
+							</form>
+			<form id="readReportForm" method="post" enctype="multipart/form-data">
+			<table id='readRoprtTable'>
+						<input id="file" name="file" type="file"></input>
+						
+						<a id="readReportForma" class="easyui-linkbutton"
+							href="javascript:void(0);">导入</a>
+					</table>
 				</form>
-
-
-		<div id="g" style="margin-top: 3px;" >
-		<table id="dg" class="easyui-datagrid" style="height: 200px;" title="Customer">
-		</table>
-	</div>
-		<div id="saveDive" align="center" style="margin-top: 10px;">
-
+            <div id="g" style="margin-top: 3px;">
+					<table id="dg" class="easyui-datagrid" style="height: 200px;"
+						title="Customer">
+					</table>
+				</div>
+			<div id="saveDive" align="center" style="margin-top: 10px;">
 			<a id="saveProjectBtn" class="easyui-linkbutton" icon="icon-save"
-				href="javascript:void(0);">保存</a>
-			 <a id="closePageBtn" class="easyui-linkbutton" icon="icon-cancel"
-				href="javascript:void(0);">关闭</a>
-			
+						href="javascript:void(0);">保存</a> <a id="closePageBtn"
+						class="easyui-linkbutton" icon="icon-cancel"
+						href="javascript:void(0);">关闭</a>
+				</div>
 
 		</div>
-	</form>
-			</div>
 	</div>
-		
 
-		
+
+
 </body>
 </html>

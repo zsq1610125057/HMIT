@@ -43,7 +43,7 @@ public interface ProjectDao {
 	
 	public int getOrderCount() throws SQLException;
 	
-	public void updateOrderStatus(Order order, String action) throws SQLException;
+	public void updateOrderStatus(OrderVO ordervo, String action) throws SQLException;
     public void updateOrderWMId(int wMId,int ordId,float difference) throws SQLException;
     public void updateOrderStatus1(Order order, String action) throws SQLException;
     //增加发票

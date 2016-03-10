@@ -65,9 +65,10 @@ public class supplierDaoImp implements supplierDao {
 	}
 
 	@Override
-	public void addSupplier(Supplier supplier) throws SQLException {
+	public int addSupplier(Supplier supplier) throws SQLException {
 		// TODO Auto-generated method stub
-		sqlMapClient.insert("addSupplier", supplier);
+		int in=(Integer) sqlMapClient.insert("addSupplier", supplier);
+		return in;
 	}
 
 	@Override

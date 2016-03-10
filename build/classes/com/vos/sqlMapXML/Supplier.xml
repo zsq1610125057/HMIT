@@ -43,10 +43,13 @@
 		select equName ,equNumber,costPrice,payables  from purchaseorder where supId=#supId# and payables>0
 	]]>
 	</select>
-    <insert id="addSupplier" parameterClass="com.vos.Supplier">
+    <insert id="addSupplier"  parameterClass="com.vos.Supplier">
 	<![CDATA[				  
 			insert into supplier(supName,contact,address,contactPersonName,empId) values(#supName#,#contact#,#address#,#contactPersonName#,#empId#)
 			]]>
+			<selectKey resultClass="java.lang.Integer"  keyProperty="supId" >    
+             SELECT last_insert_id() as supId   
+        </selectKey>  
 	</insert>
     <update id="editSupplier" parameterClass="com.vos.Supplier">
 		<![CDATA[

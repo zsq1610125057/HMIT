@@ -40,7 +40,7 @@ public interface ProjectService {
 	
 	public int getOrderCount() throws SQLException;
 	
-	public void updateOrderStatus(Order order, String action) throws SQLException;
+	public void updateOrderStatus(OrderVO ordervo, String action) throws SQLException;
 	
 	public void updateOrderWMId(int wMId, int ordId,float difference) throws SQLException;
 	

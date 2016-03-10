@@ -136,32 +136,11 @@
         </selectKey>  
 	</insert>
 	<insert id="saveOrder" parameterClass="com.vos.Order">
+		<![CDATA[
 		insert into purchaseorder(ProId,EquName,EquDescription,EquNumber,SellTotalPrice,IfWholesale,OrderRemarks,status,SellUnitPrice,LastUpdateBy,LastUpdateDate) values (#proId#,#equName#,#equDescription#,#equNumber#,#sellTotalPrice#,
 				#ifWholeSale#,#remarks#,#status#,#sellPrice#,#lastUpdateBy#,str_to_date(now(),'%Y-%m-%d %H:%i:%s'))
-	
+			]]>
 	</insert>
-<!-- 	<parameterMap class="java.util.Map" id="orderListPara"> -->
-<!-- 		<parameter property="beginRow" mode="IN" javaType="java.lang.Integer" jdbcType="INTEGER"/> -->
-<!-- 		<parameter property="endRow" mode="IN" javaType="java.lang.Integer" jdbcType="INTEGER"/> -->
-<!-- 		<parameter property="list" mode="OUT" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" resultMap="searchResult"/> -->
-
-<!-- 	</parameterMap> -->
-<!-- 	<resultMap class="com.vos.Order" id="searchResult"> -->
-<!-- 		 <result property="ordId" column="id" jdbcType="INTEGER" nullValue=""/>   -->
-<!-- 		 <result property="equDescription" column="equDescription" jdbcType="VARCHAR" nullValue=""/> -->
-<!-- 		 <result property="equNumber" column="equNumber" jdbcType="INTEGER" nullValue=""/>  -->
-<!-- 		 <result property="sellPrice" column="sellUnitPrice" jdbcType="FLOAT" nullValue=""/>  -->
-<!-- 		 <result property="sellTotalPrice" column="sellTotalPrice" jdbcType="FLOAT" nullValue=""/>  -->
-<!-- 		 <result property="supName" column="supName" jdbcType="VARCHAR" nullValue=""/>  -->
-<!-- 		 <result property="costUnitPrice" column="costUnitPrice" jdbcType="FLOAT" nullValue=""/>  -->
-<!-- 		 <result property="costPrice" column="costPrice" jdbcType="FLOAT" nullValue=""/>  -->
-<!-- 		 <result property="payRemarks" column="payRemarks" jdbcType="VARCHAR" nullValue=""/>  -->
-<!-- 		 <result property="status" column="status" jdbcType="VARCHAR" nullValue=""/>  -->
-<!-- 		 <result property="proName" column="proName" jdbcType="VARCHAR" nullValue=""/>   -->
-<!-- 	</resultMap> -->
-<!-- 	<procedure id="getOrderListByPager" parameterMap="orderListPara"> -->
-<!-- 		{call hmit.get_order_list(?,?,?)} -->
-<!-- 	</procedure> -->
 	<select id="getOrderListByPager" resultClass="com.vos.Order"
 		parameterClass="java.util.Map">
 			<![CDATA[
@@ -184,23 +163,20 @@
 					po.SupId as SupId
 					FROM
 					purchaseorder AS po ,
-					project AS pt]]>
-					<dynamic prepend="WHERE">
-					<![CDATA[po.ProId = pt.ProId]]>
-					 <isParameterPresent>
+					project AS pt where po.ProId = pt.ProId]]>
+					<dynamic> 
                    <isNotEmpty prepend="AND" property="proId">       
-                    and  po.ProId =#proId#   
+                     po.ProId = #proId#  
                  </isNotEmpty> 
                  <isNotEmpty prepend="AND" property="equName">       
-                    and  po.EquName =#equName#   
+                     po.EquName like '%$equName$%'   
                  </isNotEmpty> 
                  <isNotEmpty prepend="AND" property="status">       
-                    and  po.status =#status#  
+                     po.status like '%$status$%'  
                  </isNotEmpty> 
                  <isNotEmpty prepend="AND" property="supId">       
-                    and  po.SupId =#supId#   
+                     po.SupId like '%$supId$%'   
                  </isNotEmpty> 
-                 </isParameterPresent>         
 		          </dynamic>		
 					
 					  ) a LEFT JOIN supplier s on a.SupId = s.SupId limit #beginRow#,#pageSize#
@@ -214,7 +190,7 @@
 		]]>
 	</select>
 	
-	<update id="updateOrderSupInfo" parameterClass="com.vos.Order">
+	<update id="updateOrderSupInfo" parameterClass="com.vos.OrderVO">
 		update purchaseOrder set equNumber = #equNumber#,CostUnitPrice=#costUnitPrice#,CostPrice=#costPrice#,SellTotalPrice=#sellTotalPrice#,SellUnitPrice=#sellPrice#,
 			PayRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),supId = #supId# where ordId = #ordId#
 	</update>

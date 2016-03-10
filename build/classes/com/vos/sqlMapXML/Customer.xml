@@ -40,9 +40,7 @@
 	<select id="getCustomerCount" resultClass="java.lang.Integer" parameterClass="com.vos.CusSearchVO">
 	<![CDATA[
 		select count(*) from customer 
-		]]>
-	
-		
+		]]>	
 	</select>
 
 

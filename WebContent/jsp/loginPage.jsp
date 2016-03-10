@@ -150,7 +150,7 @@ a:hover {
 										<td align="left">&nbsp;</td>
 									</tr>
 									<tr>
-										<td height="36">&nbsp;&nbsp;验证码：</td>
+										<td height="36">&nbsp;验证码：</td>
 										<td align="left"><input type="text" name="code" /></td>
 										<td><img id="number" src="<%=basePath %>/jsp/number.jsp"
 											border=0 /> <a

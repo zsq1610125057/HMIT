@@ -20,9 +20,9 @@
 var editFlag = undefined;
 var artchange = false;
 var selectRow;
-
+var Suplist;
 $(function (){
-	window.Suplist = getSupplierList('<%=basePath%>getSupplierList');
+	Suplist = getSupplierList('<%=basePath%>getSupplierList');
 	$("#dg").datagrid({
 	url: "<%=basePath%>getOrderListByPager", //指向一个一般处理程序或者一个控制器，返回数据要求是Json格式，直接赋值Json格式数据也可，我以demo中自带的Json数据为例，就不写后台代码了，但是我会说下后台返回的注意事项
 	iconCls: "icon-add",
@@ -65,10 +65,17 @@ $(function (){
 	{
 		field: 'supId', title: '厂商', width: 80,
 			formatter:  function(value,row,index) {
-				for(var i=0; i<Suplist.length; i++){
+				if(value==0){
+					return null;
+				}
+				var i;
+				for(i=0; i<Suplist.length; i++){
 					if(Suplist[i].supId == value){
 						return Suplist[i].supName;
 					}
+				}
+				if(i==Suplist.length){
+					return value;
 				}
 			}
 		
@@ -174,7 +181,7 @@ $(function (){
 					var index = $("#dg").datagrid('getRowIndex', rows[0]);
 					$("#dg").datagrid('beginEdit', index);
 					editFlag = index;
-					
+					//alert(editFlag);
 			 	}	
 			}else{
 				if (editFlag != undefined) {
@@ -195,7 +202,7 @@ $(function (){
 	{
 	 	text: "保存",
 	 	iconCls: "icon-save",
-	 	handler: function () {
+	 	handler: function () {		
 	 		$("#dg").datagrid('endEdit', editFlag);
 	 	}
 	},"-",
@@ -431,6 +438,7 @@ function saveChange(index) {
     			success : function(r) {
     				if(r) {
     					$.messager.alert('操作提示', r.msg, r.result);
+    					Suplist=getSupplierList('<%=basePath%>getSupplierList');
     					$("#dg").datagrid('reload');
     				}
     			},
@@ -475,6 +483,7 @@ function reiewOrder(index) {
 	    			success : function(r) {
 	    				if(r) {
 	    					$.messager.alert('操作提示', r.msg, r.result);
+	    					Suplist=getSupplierList('<%=basePath%>getSupplierList');
 	    					$("#dg").datagrid('reload');
 	    				}
 	    			},
@@ -557,31 +566,44 @@ function addeditor1(){
 			type: 'combobox',
 			options: {
 			valueField : 'supId',
-			editable: false,
+			editable: true,
 			textField : 'supName',
 			data : Suplist,
 			required: true,
 			filter : function(q,row) {
-				var opts = $(this).combobox('options');
-			return row[opts.textField].indexOf(q) > -1;
+				      var opts = $(this).combobox('options');
+				      
+				     // $(this).combobox('setText', _row["supName"]);
+			          return row[opts.textField].indexOf(q) > -1;
+			          
 			},
-			 onChange: function (newValue, oldValue) {
-				 artchange = true;
-		 },
-			 onHidePanel: function () {
+			onChange: function (newValue, oldValue) {	  
+				     artchange = true;
+				     //$(this).combobox('setText', "ningbo");
+		    },
+		   onHidePanel: function () {
 				 var t = $(this).combobox('getText');
-				 if(artchange) {
-				 if (selectRow == null || t != selectRow.supName) {
-					 $(this).combobox('setText', '');
-					 $(this).combobox('setValue', '');
-					 }
-				 }
-	           artChanged = false;
-	             selectRow = null;
+				 var listdata = $.data(this, "combobox");
+				 var rowdata = listdata.data;
+				 for (var i = 0; i < rowdata.length; i++) {
+	                    var _row = rowdata[i];
+	                    var txt_Val = _row["supName"];
+	                    if (txt_Val.toLowerCase().indexOf(t.toLowerCase()) > -1) {
+	                        $(this).combobox('setText', _row["supName"]);
+	                       //
+	                        $(this).val(_row["supName"]);
+	                       
+	                        return;
+	                    }
+	                }
+				// alert($(this).combobox('getText'));
+	          // artChanged = false;
+	            // selectRow = null;
+				 
 		 },
-			 onSelect : function(record) {
+			 onSelect : function(record) {		 
 				 selectRow = record;
-		}
+		},
 			}
 			}
 	});

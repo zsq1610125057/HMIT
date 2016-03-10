@@ -11,7 +11,7 @@ public interface supplierDao {
 	public List<Supplier> getAllSupplier(int firstRow, Integer pageSize,
 			SupSearchVO supSearchVO) throws SQLException;
 	public int getSupplierCount(SupSearchVO supSearchVO) throws SQLException;
-	public void addSupplier(Supplier supplier) throws SQLException;
+	public int addSupplier(Supplier supplier) throws SQLException;
 	public void editSupplier(Supplier supplier) throws SQLException;
 	public void delectSupplier(int supId) throws SQLException;
 	public Supplier selectPaymentAmount(int supId) throws SQLException;

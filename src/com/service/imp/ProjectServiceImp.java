@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dao.ProjectDao;
+import com.dao.supplierDao;
 import com.service.ProjectService;
 import com.vos.Contract;
 import com.vos.ContractVO;
@@ -39,6 +40,13 @@ import com.vos.Tender;
 public class ProjectServiceImp implements ProjectService {
 	private static Logger logger = Logger.getLogger("service");
 	private ProjectDao projectDao;
+	private supplierDao supplierDao;
+	public supplierDao getSupplierDao() {
+		return supplierDao;
+	}
+	public void setSupplierDao(supplierDao supplierDao) {
+		this.supplierDao = supplierDao;
+	}
 	private Object computer;
 	public ProjectDao getProjectDao() {
 		return projectDao;
@@ -106,10 +114,18 @@ public class ProjectServiceImp implements ProjectService {
 		return projectDao.getOrderCount();
 	}
 	@Override
-	public void updateOrderStatus(Order order, String action)
+	public void updateOrderStatus(OrderVO ordervo, String action)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		projectDao.updateOrderStatus(order, action);
+		boolean isNum = ordervo.getSupId().matches("[0-9]+");
+		if(!isNum){
+		  Supplier supplier=new Supplier();
+		  supplier.setSupName(ordervo.getSupId());
+		  supplier.setEmpId(1);
+		 int in= supplierDao.addSupplier(supplier);
+		// System.out.println("存供应商"+in);
+		 ordervo.setSupId(in+"");
+		}
+		projectDao.updateOrderStatus(ordervo, action);
 	}
 	@Override
 	public void updateOrderWMId(int wMId, int ordId,float difference) throws SQLException {

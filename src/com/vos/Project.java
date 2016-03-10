@@ -17,7 +17,7 @@ public class Project {
 	private String deliveredDate;//收回时间
 	private String delayDes;//延迟说明
 	private String remarks;
-	private String conId;//合同编号
+	private int conId;//合同编号
 	private String signDate;//项目签订时间
 	private String beginDate;//项目开始时间
 	private String ifInv;//是否开票
@@ -169,10 +169,10 @@ public class Project {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	public String getConId() {
+	public int getConId() {
 		return conId;
 	}
-	public void setConId(String conId) {
+	public void setConId(int conId) {
 		this.conId = conId;
 	}
 	public String getSignDate() {

@@ -104,7 +104,7 @@ public class ProjectDaoImp implements ProjectDao {
 		// TODO Auto-generated method stub
 		int id=0;
 		try {
-			System.out.println(project.getIfInv());
+			//System.out.println(project.getIfInv());
 			id = (Integer) sqlMapClient.insert("saveNewProject",project);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -150,12 +150,12 @@ public class ProjectDaoImp implements ProjectDao {
 		return count;
 	}
 	@Override
-	public void updateOrderStatus(Order order, String action)
+	public void updateOrderStatus(OrderVO ordervo, String action)
 			throws SQLException {
 		try{
-			order.setAction(action);
-			order.setLastUpdateBy(HmitUtil.CURRENT_USER);
-			sqlMapClient.update("updateOrderSupInfo", order);
+			ordervo.setAction(action);
+			ordervo.setLastUpdateBy(HmitUtil.CURRENT_USER);
+			sqlMapClient.update("updateOrderSupInfo", ordervo);
 		}catch(SQLException e) {
 			e.printStackTrace();
 			throw e;

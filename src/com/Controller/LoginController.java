@@ -540,7 +540,7 @@ System.out.println("11"+supplier.getSupId());
 	@ResponseBody
 	public Map<String,Object> getOrderListByPager(@ModelAttribute OrderVO order ,@RequestParam("rows") Integer pageSize,
 			@RequestParam("page") Integer pageNumber) throws IOException {
-		System.out.println("sjdfk"+order.getProId());
+		//System.out.println("sjdfk"+order.getProId());
 		int count = 0;
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<Order> pageList = new ArrayList<Order>();
@@ -548,6 +548,7 @@ System.out.println("11"+supplier.getSupId());
 		int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
 		int intPageSize=pageSize==null||pageSize<=0?2:pageSize;
 		int firstRow = (pageNumber - 1) * pageSize;
+		System.out.println("项目ID"+order.getProId());
 		try{
 			pageList = projectService.getOrderListByPager(order,firstRow, pageSize);
 			//System.out.println("采购表"+pageList);
@@ -571,15 +572,17 @@ System.out.println("11"+supplier.getSupId());
 			String action = arrData[1];
 			pw = response.getWriter();
 			rowData = URLDecoder.decode(rowData,"UTF-8");
-			Order order = (Order) JSONObject.toBean(JSONObject.fromObject(rowData), Order.class);
-			projectService.updateOrderStatus(order, action);
+			OrderVO ordervo = (OrderVO) JSONObject.toBean(JSONObject.fromObject(rowData), OrderVO.class);
+		    //System.out.println("厂商id"+ordervo.getSupId());
+			//int supid=Integer.valueOf(ordervo.getSupId());
+			projectService.updateOrderStatus(ordervo, action);
 			if(action.equals(HmitUtil.ORDER_STATUS_ARRIVED)){
 					Warehousemanagement ware=new Warehousemanagement();
-					ware.setStock(order.getEquNumber());
-					ware.setEquName(order.getEquName());
+					ware.setStock(ordervo.getEquNumber());
+					ware.setEquName(ordervo.getEquName());
 					int id=warehousemanagementService.addWarehousemanagementService(ware);
-					float difference=order.getSellTotalPrice()-order.getCostPrice();
-					projectService.updateOrderWMId(id, order.getOrdId(),difference);
+					float difference=ordervo.getSellTotalPrice()-ordervo.getCostPrice();
+					projectService.updateOrderWMId(id, ordervo.getOrdId(),difference);
 				}
 			
 		    pw.print(messageSuc());

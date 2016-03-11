@@ -36,7 +36,7 @@ public interface ProjectService {
 	
 	public void saveNewProject(Project project,List<Order> order) throws SQLException;
 	
-	public List<Order> getOrderListByPager(OrderVO orderVO,int firstRow,int pageSize) throws SQLException;
+	public List<Order> getOrderListByPager(int proId) throws SQLException;
 	
 	public int getOrderCount() throws SQLException;
 	

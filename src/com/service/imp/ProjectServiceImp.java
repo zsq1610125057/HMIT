@@ -104,9 +104,9 @@ public class ProjectServiceImp implements ProjectService {
 	
 	}
 	@Override
-	public List<Order> getOrderListByPager(OrderVO orderVO,int firstRow, int pageSize)
+	public List<Order> getOrderListByPager(int proId)
 			throws SQLException {
-		return projectDao.getOrderListByPager(orderVO,firstRow, pageSize);
+		return projectDao.getOrderListByPager(proId);
 	}
 	@Override
 	public int getOrderCount() throws SQLException {

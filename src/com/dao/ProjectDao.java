@@ -39,7 +39,7 @@ public interface ProjectDao {
 	
 	public void saveOrder(Order order) throws SQLException;
 	
-	public List<Order> getOrderListByPager(OrderVO orderVO ,int firstRow,int pageSize) throws SQLException;
+	public List<Order> getOrderListByPager(int proId) throws SQLException;
 	
 	public int getOrderCount() throws SQLException;
 	

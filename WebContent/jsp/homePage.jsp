@@ -34,6 +34,7 @@
 								]
 						},{"menuid":"2","icon":"icon-sys","menuname":"采购管理",
 							"menus":[{"menuname":"采购管理","icon":"icon-nav","url":"project/order.jsp"},
+							         {"menuname":"项目信息管理","icon":"icon-nav","url":"project/project.jsp"},
 									{"menuname":"供应商管理","icon":"icon-nav","url":"project/supplier.jsp"}
 								]
 						},{"menuid":"3","icon":"icon-sys","menuname":"客户管理",

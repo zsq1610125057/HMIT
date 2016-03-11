@@ -200,7 +200,6 @@ public class LoginController {
 	@RequestMapping("/getPayInfo")
 	public void getPayInfo(HttpServletResponse response,@ModelAttribute Supplier supplier){
 		PrintWriter pw = null;
-System.out.println("11"+supplier.getSupId());
 		try {
 			pw = response.getWriter();
 		} catch (IOException e1) {
@@ -538,23 +537,13 @@ System.out.println("11"+supplier.getSupId());
 
 	@RequestMapping("/getOrderListByPager")
 	@ResponseBody
-	public Map<String,Object> getOrderListByPager(@ModelAttribute OrderVO order ,@RequestParam("rows") Integer pageSize,
-			@RequestParam("page") Integer pageNumber) throws IOException {
-		//System.out.println("sjdfk"+order.getProId());
-		int count = 0;
+	public Map<String,Object> getOrderListByPager(@RequestParam("proId") Integer proId) throws IOException {
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<Order> pageList = new ArrayList<Order>();
-		List<Order> totalList = new ArrayList<Order>();
-		int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
-		int intPageSize=pageSize==null||pageSize<=0?2:pageSize;
-		int firstRow = (pageNumber - 1) * pageSize;
-		System.out.println("项目ID"+order.getProId());
+		System.out.println("项目ID"+proId);
 		try{
-			pageList = projectService.getOrderListByPager(order,firstRow, pageSize);
-			//System.out.println("采购表"+pageList);
-			count = projectService.getOrderCount();
+			pageList = projectService.getOrderListByPager(proId);	
 			map.put("rows", pageList);
-			map.put("total", count);
 			return map;
 		}catch(Exception e) {
 			e.printStackTrace();

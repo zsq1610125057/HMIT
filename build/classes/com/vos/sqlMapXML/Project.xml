@@ -143,7 +143,7 @@
 	</insert>
 	<select id="getOrderListByPager" resultClass="com.vos.Order"
 		parameterClass="java.util.Map">
-			<![CDATA[
+		
 				select payables,invId,equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName from (
 				SELECT	
 					IFNULL(po.payables,"") AS payables,
@@ -163,23 +163,9 @@
 					po.SupId as SupId
 					FROM
 					purchaseorder AS po ,
-					project AS pt where po.ProId = pt.ProId]]>
-					<dynamic> 
-                   <isNotEmpty prepend="AND" property="proId">       
-                     po.ProId = #proId#  
-                 </isNotEmpty> 
-                 <isNotEmpty prepend="AND" property="equName">       
-                     po.EquName like '%$equName$%'   
-                 </isNotEmpty> 
-                 <isNotEmpty prepend="AND" property="status">       
-                     po.status like '%$status$%'  
-                 </isNotEmpty> 
-                 <isNotEmpty prepend="AND" property="supId">       
-                     po.SupId like '%$supId$%'   
-                 </isNotEmpty> 
-		          </dynamic>		
-					
-					  ) a LEFT JOIN supplier s on a.SupId = s.SupId limit #beginRow#,#pageSize#
+					project AS pt 
+					where po.ProId = pt.ProId and  po.ProId = #proId#	
+					  ) a LEFT JOIN supplier s on a.SupId = s.SupId 
 			
 			
             

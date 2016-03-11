@@ -128,17 +128,12 @@ public class ProjectDaoImp implements ProjectDao {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Order> getOrderListByPager(OrderVO orderVO,int firstRow, int pageSize)
+	public List<Order> getOrderListByPager(int proId)
 			throws SQLException {
 		List<Order> list = null;
 		Map<String,Object> map = new HashMap<String,Object>();
-		//int endRow = pageSize+firstRow;
-		map.put("beginRow", firstRow);
-		map.put("pageSize", pageSize);
-		map.put("equName", orderVO.getEquName());
-		map.put("proId", orderVO.getProId());
-		map.put("status", orderVO.getStatus());
-		map.put("supId", orderVO.getSupId());
+		//int endRow = pageSize+firstRow;	
+		map.put("proId", proId);
 		list = sqlMapClient.queryForList("getOrderListByPager",map);
 		return list;
 	}

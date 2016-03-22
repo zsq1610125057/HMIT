@@ -80,7 +80,7 @@ public interface ProjectService {
     
     //近期项目
 	public List<Project> getNowProject(int firstRow,int pageSize) throws SQLException;
-	public int getNowProjectCount() throws SQLException;
+	public int getNowProjectCount(int firstRow, int pageSize) throws SQLException;
 	
 	//招标项目
 	public List<Tender> getTenderProject(int firstRow,int pageSize) throws SQLException;
@@ -112,4 +112,8 @@ public interface ProjectService {
 	public void updatepropaymoney(int proId,float money);
 	//获取excel资源
 	public List<Order> readReport(InputStream inp);
+	//修改采购信息
+	public void updateOrderStatus(Project pro);
+		
+	
 }

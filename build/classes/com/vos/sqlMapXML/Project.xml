@@ -181,14 +181,14 @@
 			PayRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),supId = #supId# where ordId = #ordId#
 	</update>
 	<update id="updateOrderSupInfo1" parameterClass="com.vos.Order">
-		update purchaseOrder set payRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),pWName=#payWay#,payDate=str_to_date(#payDate#, '%m/%d/%Y'),payables=#payables# where ordId = #ordId#
+		update purchaseOrder set payRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),pWName=#payWay#,payDate=str_to_date(#payDate#, '%Y-%m-%d'),payables=#payables# where ordId = #ordId#
 	</update>
 	<update id="updateorderofinv" parameterClass="com.vos.Order">
 		update purchaseOrder set status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),InvId=#invId# where ordId = #ordId#
 	</update>
 	<update id="updateOrderArrival" parameterClass="com.vos.Order">
 	
-		update purchaseOrder set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),payRemarks=#payRemarks#,status=#action#,arrivalTime=str_to_date(#arrivalTime#,'%m/%d/%Y'),payables=#payables# where  ordid = #ordId#
+		update purchaseOrder set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),payRemarks=#payRemarks#,status=#action#,arrivalTime=str_to_date(#arrivalTime#,'%Y-%m-%d'),payables=#payables# where  ordid = #ordId#
 
 	</update>
 	<update id="updateOrderWMId" parameterClass="java.util.Map">
@@ -228,13 +228,13 @@
 	</select>
 	<select id="getNowProject" resultClass="com.vos.Project" parameterClass="java.util.Map">
 	<![CDATA[
-		select proName,proMoney,proBrokerage,beginDate,cusId from project where beginDate<str_to_date(now(),'%Y-%m-%d') limit #beginRow#,#pageSize#
+		select proName,proMoney,proBrokerage,beginDate,cusId from project where beginDate<str_to_date(now(),'%Y-%m-%d') and beginDate>str_to_date(#data#,'%Y-%m-%d') limit #beginRow#,#pageSize#
 ]]>	
 		
 	</select>
-		<select id="getNowProjectCount" resultClass="java.lang.Integer" parameterClass="com.vos.Project">
+		<select id="getNowProjectCount" resultClass="java.lang.Integer" parameterClass="java.util.Map">
 	<![CDATA[
-		select count(*) from project 
+		select count(*) from project where beginDate<str_to_date(now(),'%Y-%m-%d') and beginDate>str_to_date(#data#,'%Y-%m-%d') limit #beginRow#,#pageSize#
 		]]>		
 	</select>
 	
@@ -342,5 +342,8 @@
     <![CDATA[
     update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),paymoney=#money# where proId=#proId#
     ]]>
+    </update>
+    <update id="updateOrderStatus" parameterClass="java.util.Map">
+    update project set LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),orderStatue=#orderStatue#,expecteAT=#expecteAT#,confirmArrival=#confirmArrival# where proId=#proId#
     </update>
 </sqlMap>

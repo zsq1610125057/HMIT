@@ -5,7 +5,7 @@
 <sqlMap>
 <insert id="addorderPay" parameterClass="com.vos.Paymenthistory">
 <![CDATA[
-insert into paymenthistory(ordId,paidMoney,paidDate,payRemarks,pWName) values(#ordId#,#paidMoney#,str_to_date(#paidDate#,'%m/%d/%Y'),#payRemarks#,#payWay#) 
+insert into paymenthistory(ordId,paidMoney,paidDate,payRemarks,pWName) values(#ordId#,#paidMoney#,str_to_date(#paidDate#,'%Y-%m-%d'),#payRemarks#,#payWay#) 
   ]]>
   
 </insert>

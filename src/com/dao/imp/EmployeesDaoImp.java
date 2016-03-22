@@ -74,8 +74,10 @@ public class EmployeesDaoImp implements EmployeesDao {
 	}
 	@Override
 	public int getEmployeeCount(EmpSearchVO empSearchVO) throws SQLException {
-		// TODO Auto-generated method stub
-		return (Integer) sqlMapClient.queryForObject("getEmployeeCount",empSearchVO);
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("title", empSearchVO.getTitle());
+		map.put("RoleType", empSearchVO.getRoleType());
+		return (Integer)sqlMapClient.queryForObject("getEmployeeCount",map);
 	}
 
 	@Override

@@ -40,7 +40,7 @@
 	</select>
 		<select id="getPayInfoList" resultClass="com.vos.Order">
 	<![CDATA[
-		select equName ,equNumber,costPrice,payables  from purchaseorder where supId=#supId# and payables>0
+		select equName ,equNumber,costPrice,payables  from purchaseorder where supId=#supId# 
 	]]>
 	</select>
     <insert id="addSupplier"  parameterClass="com.vos.Supplier">

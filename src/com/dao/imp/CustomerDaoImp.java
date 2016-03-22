@@ -101,8 +101,16 @@ public class CustomerDaoImp implements CustomerDao {
 
 	@Override
 	public int getCustomerCount(CusSearchVO cusSearchVO) throws SQLException {
-		// TODO Auto-generated method stub
-		int in=(Integer) sqlMapClient.queryForObject("getCustomerCount",cusSearchVO);
+		Map<String,Object> map = new HashMap<String, Object>();
+		List<Customer> list = new ArrayList<Customer>();
+		map.put("comName", cusSearchVO.getCompName());
+		map.put("cusName", cusSearchVO.getCusName());
+		map.put("contact", cusSearchVO.getContact());
+		map.put("address", cusSearchVO.getAddress());
+		map.put("beginMoney", cusSearchVO.getBeginMoney());
+		map.put("endMoney", cusSearchVO.getEndMoney());
+		map.put("empId", cusSearchVO.getEmpName());
+		int in=(Integer) sqlMapClient.queryForObject("getCustomerCount",map);
 		return in;
 	}
 

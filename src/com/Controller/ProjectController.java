@@ -54,6 +54,7 @@ import com.vos.Customer;
 import com.vos.Invoice;
 import com.vos.JsonResult;
 import com.vos.Order;
+import com.vos.OrderVO;
 import com.vos.Paymenthistory;
 import com.vos.ProSearchVO;
 import com.vos.Project;
@@ -128,7 +129,6 @@ public class ProjectController {
 	@RequestMapping("/getProject")
 	@ResponseBody
 	public Map<String, Object> getProject(@RequestParam("rows") Integer pageSize,@RequestParam("page") Integer pageNumber,HttpServletResponse response,@ModelAttribute ProSearchVO proSearchVO) {
-		//System.out.println("customer______"+cusSearchVO.getEmpName());
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Project> pageList = new ArrayList<Project>();
 		int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
@@ -504,4 +504,19 @@ public class ProjectController {
 		      map.put("rows", list);     
 		       return map;
 		    }  
+    //修改采购信息
+		 @RequestMapping("/updateprojectsatue")
+			public void updateOrderStatus(@RequestParam("data") String row) {
+			
+						
+					try {
+						row = URLDecoder.decode(row,"UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Project pro = (Project) JSONObject.toBean(JSONObject.fromObject(row), Project.class);
+				    projectService.updateOrderStatus(pro);			
+			}
+
 }

@@ -71,7 +71,7 @@ public interface ProjectDao {
     //获取项目进度数量
     public int getProScheduleCount(int proId) throws SQLException;
 	public List<Project> getNowProject(int firstRow,int pageSize) throws SQLException;
-	public int getNowProjectCount() throws SQLException;
+	public int getNowProjectCount(int firstRow, int pageSize) throws SQLException;
 	
 	//招标项目
 	public List<Tender> getTenderProject(int firstRow,int pageSize) throws SQLException;
@@ -106,4 +106,6 @@ public interface ProjectDao {
   	public Project getpropaymoney(int proId) throws SQLException;
   	//修改已付款
   	public void updatepropaymoney(int proId,float money);
+  	//添加采购信息
+  	public void updateOrderStatus(Project pro);
 }

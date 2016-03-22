@@ -181,10 +181,7 @@ public class EmployeeController {
 		int intPageNum=pageNumber==null||pageNumber<=0?1:pageNumber;
 		int intPageSize=pageSize==null||pageSize<=0?10:pageSize;
 		int firstRow = (pageNumber - 1) * pageSize;
-		System.out.println("111"+empSearchVO.getRoleType());
-		System.out.println("333"+empSearchVO.getTitle());
-		try {
-			//list = customerService.getAllCustomer();
+		try {	
 			pageList = employeesService.getAllEmployee(firstRow, pageSize,empSearchVO);
 			int count = employeesService.getEmployeeCount(empSearchVO);
 			map.put("rows", pageList);

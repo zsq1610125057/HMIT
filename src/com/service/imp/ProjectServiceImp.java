@@ -244,9 +244,9 @@ public class ProjectServiceImp implements ProjectService {
 		return projectDao.getNowProject(firstRow, pageSize);
 	}
 	@Override
-	public int getNowProjectCount() throws SQLException {
+	public int getNowProjectCount(int firstRow, int pageSize) throws SQLException {
 		// TODO Auto-generated method stub
-		return projectDao.getNowProjectCount();
+		return projectDao.getNowProjectCount(firstRow,pageSize);
 	}
 	@Override
 	public List<Project> getProInfoList(int id) throws SQLException {
@@ -442,5 +442,9 @@ public class ProjectServiceImp implements ProjectService {
             break;  
         }  
         return cellStr;  
-    }  
+    }
+	@Override
+	public void updateOrderStatus(Project pro) {
+		projectDao.updateOrderStatus(pro);
+	}  
 }

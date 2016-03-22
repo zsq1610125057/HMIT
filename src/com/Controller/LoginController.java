@@ -137,8 +137,8 @@ public class LoginController {
 	    
 		try {
 			Employees employees1 = employeesService.queryById(employees);
-			if(employees1!=null&&(incode.equals(rightcode))){
-				request.getSession().setAttribute("current_user", employees.getLoginName());
+			if(employees1!=null&&(incode.equals(rightcode))){			
+				request.getSession().setAttribute("user", employees.getLoginName());
 				HmitUtil.CURRENT_USER = LoginName;
 				HmitUtil.CURRENT_PASSWORD=password;
 				pw.print("{\"result\":" + true + ",\"msg\":\"" + LOGIN_SUCCESS_MSG + "\"}");
@@ -947,7 +947,7 @@ public class LoginController {
 			int firstRow = (pageNumber - 1) * pageSize;
 			try {
 				pageList = projectService.getNowProject(firstRow, pageSize);
-				int count = projectService.getNowProjectCount();
+				int count = projectService.getNowProjectCount(firstRow, pageSize);
 				map.put("rows", pageList);
 				map.put("total", count);
 				return map;

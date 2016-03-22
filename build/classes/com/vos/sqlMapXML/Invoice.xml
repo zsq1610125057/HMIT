@@ -5,7 +5,7 @@
 <sqlMap>
 <insert id="addInv" parameterClass="com.vos.Invoice">
 <![CDATA[
-insert into invoice values(#invId#,#invMoney#,#invContent#,#invType#,str_to_date(#invDate#,'%m/%d/%Y'),#invRemarks#,#proId#,#remainingSum#)
+insert into invoice values(#invId#,#invMoney#,#invContent#,#invType#,str_to_date(#invDate#,'%Y-%m-%d'),#invRemarks#,#proId#,#remainingSum#)
 ]]>
 </insert>
 <select id="getInvoiceList" resultClass="com.vos.Invoice"  parameterClass="java.util.Map">

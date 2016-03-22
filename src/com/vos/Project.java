@@ -33,7 +33,30 @@ public class Project {
 	private String factRecevablesDate;
 	private String pTName;
 	private float paymoney;
+	private String orderStatue;//采购完成状态
+	private String expecteAT;//预计到货时间
+	private String confirmArrival;//到货确认
 	
+	
+	
+	public String getOrderStatue() {
+		return orderStatue;
+	}
+	public void setOrderStatue(String orderStatue) {
+		this.orderStatue = orderStatue;
+	}
+	public String getExpecteAT() {
+		return expecteAT;
+	}
+	public void setExpecteAT(String expecteAT) {
+		this.expecteAT = expecteAT;
+	}
+	public String getConfirmArrival() {
+		return confirmArrival;
+	}
+	public void setConfirmArrival(String confirmArrival) {
+		this.confirmArrival = confirmArrival;
+	}
 	public float getPaymoney() {
 		return paymoney;
 	}

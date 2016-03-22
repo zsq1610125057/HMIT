@@ -9,12 +9,10 @@
 		select * from employees 
 	]]>
 	</select>
-	<select id="getEmployeesCount" resultClass="java.lang.Integer" >
+	<select id="getEmployeesCount" resultClass="java.lang.Integer" parameterClass="java.util.Map">
 	<![CDATA[
 		select count(*) from employees 
-		]]>
-	
-		
+		]]>	
 	</select>
 	<select id="getAllEmployee" resultClass="com.vos.Employees" parameterClass="java.util.Map">
 	<![CDATA[
@@ -31,10 +29,18 @@
 		limit #firstRow#,#pageSize#
 	</select>
 	
-	<select id="getEmployeeCount" resultClass="java.lang.Integer" parameterClass="com.vos.EmpSearchVO">
+	<select id="getEmployeeCount" resultClass="java.lang.Integer" parameterClass="java.util.Map">
 	<![CDATA[
 		select count(*) from employees 
-		]]>		
+		]]>
+		<dynamic prepend="WHERE">
+			 <isNotEmpty prepend="AND" property="title">       
+                  <![CDATA[empId=#title#]]>  
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="RoleType">            
+                  <![CDATA[RoleId=#RoleType#]]>       
+            </isNotEmpty>        
+		</dynamic>				
 	</select>
 	<select id="queryById" parameterClass="com.vos.Employees" resultClass="com.vos.Employees">  
 	<![CDATA[

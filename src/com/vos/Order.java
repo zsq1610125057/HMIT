@@ -28,6 +28,13 @@ public class Order {
 	private String remarks;
 	private String ifWholeSale;
 	private String arrivalTime;
+	private String expecteAT;
+	public String getExpecteAT() {
+		return expecteAT;
+	}
+	public void setExpecteAT(String expecteAT) {
+		this.expecteAT = expecteAT;
+	}
 	public float getMoney() {
 		return money;
 	}

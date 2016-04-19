@@ -200,24 +200,6 @@
 		var data1 = sy.serializeObject($('#customerTable').form());
 		 var data = encodeURI(JSON.stringify(data1),"UTF-8");
 		 $('#dg').datagrid('load', data1);
-// 		 $.ajax({
-//     		 url : url,
-//     		 data : 'data=' + data,
-//     		 dataType : 'json',
-//     		 type : 'post',
-//     		 success : function(result) {
-//                  if (result) {
-//                 	 $('#dg').datagrid('loadData', { total: 0, rows: [] });
-//                 	 $('#dg').datagrid('loadData',{});
-//                  }
-//                  else {
-//                      $.messager.alert("提示信息", "操作失败");
-//                  }
-//     		 },
-//     		 error : function() {
-    			 
-//     		 }
-//     	 });
 	}
 	
 	function clearSearch(){

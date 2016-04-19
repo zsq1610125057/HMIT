@@ -14,7 +14,8 @@
 <script type="text/javascript" src="jquery/jquery.easyui.min.js"></script>
 <style type="text/css">
 .datagrid-row{height: 50px;}
-
+.dg1{height:320px}
+.dg2{height:400px}
 </style>
 <script type="text/javascript">
 var editFlag = undefined;
@@ -89,14 +90,12 @@ $(function (){
 		width:60,
 		formatter:  function(value,row,index) {		
 
-			if (row.ifInv == '0'&&(row.proMoney-row.payMoney)!=0) {	
-				return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>添加发票</a><br><a href='javascript:void(0);' onclick='addpayProHis("+index+")'>添加付款信息</a> ";
-			} else if (row.ifInv == '1'&&(row.proMoney-row.payMoney)!=0) {
-				return "<a href='javascript:void(0);' onclick='addpayProHis("+index+")'>添加付款信息</a> ";
-			}else if (row.ifInv == '0'&&(row.proMoney-row.payMoney)==0) {
-				return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>添加发票</a> ";
+			if (row.ifInv == '0'&&(row.proMoney-row.paymoney)!=0) {	
+				return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>添加发票</a>";
+			} else if ((row.proMoney-row.paymoney)!=0) {
+				return "<a href='javascript:void(0);' onclick='addpayProHis("+index+")'>添加收款信息</a> ";
 			}else {
-				 return "<a href='javascript:void(0);' onclick='saveProInv("+index+")'>查看付款信息</a> ";
+				 return "<a href='javascript:void(0);' onclick='payProHis("+index+")'>查看收款信息</a> ";
 			}
 	}
 	}
@@ -237,9 +236,31 @@ function addpayProHis(index) {
    $('#3').text(inv[0].invContent);
    $('#4').text(inv[0].invDate);
    $('#5').text(inv[0].remainingSum);
-	 $('#pro').dialog("open").dialog('setTitle', '添加付款信息');
+   $('#paidMoney').val("");
+   $('div#pro1').show();
+   $('div#g1').removeClass("dg2").addClass("dg1");
+	 $('#pro').dialog("open").dialog('setTitle', '添加收款信息');
 	 $('#dg1').datagrid("load",row);
 	  $('#proTable').form("load", row);
+}
+function payProHis(index) {
+	$("#dg").datagrid('selectRow',index);
+	//$("#dg").datagrid('endEdit', editFlag);
+	var row = $("#dg").datagrid('getSelected');
+	var data = encodeURI(JSON.stringify(row),"UTF-8");
+	var inv=getCustomerList('<%=basePath%>getproinv?proId='+row.proId);
+   $('#1').text(inv[0].invId);
+   $('#2').text(inv[0].invMoney);
+   $('#3').text(inv[0].invContent);
+   $('#4').text(inv[0].invDate);
+   $('#5').text(inv[0].remainingSum);
+   $('div#pro1').hide();
+   $('div#g1').removeClass("dg1").addClass("dg2");
+   $('#pro').dialog("open").dialog('setTitle', '查询收款信息');
+   $('#dg1').datagrid("load",row);
+   $('#proTable').form("load", row);
+   $('#paidMoney').val("3");
+   
 }
 function getCustomerList(url) {
 	var temp;
@@ -340,7 +361,7 @@ function saveprohistoye() {
 		buttons="#inv-buttons">
 		<form id="inv-fm" method="post">
 		    <div class="fitem" style="display: none;">
-				<label >　发票号:</label> <input name="proId"
+				<label >　项目编号:</label> <input name="proId"
 					class="easyui-validatebox" style="width: 140px;" required="true" />
 			</div>
 		    <div class="fitem">
@@ -433,8 +454,8 @@ function saveprohistoye() {
 		</div>
 			</form>
 		</div>
-		<div id="g1" region="center"  >
-		<table id="dg1" class="easyui-datagrid" style="height: 320px;" >
+		<div id="g1" region="center">
+		<table id="dg1" class="easyui-datagrid"  >
 		</table>
 	</div>
 	

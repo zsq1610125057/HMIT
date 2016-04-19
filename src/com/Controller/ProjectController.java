@@ -136,7 +136,8 @@ public class ProjectController {
 		int firstRow = (pageNumber - 1) * pageSize;
 		try {
 			//list = customerService.getAllCustomer();
-		
+		System.out.println(proSearchVO.getTimestart());
+		System.out.println(proSearchVO.getTimeend());
 			pageList = projectService.getProject(firstRow, pageSize,proSearchVO);
 			int count = projectService.getProjectCount(proSearchVO);
 			map.put("rows", pageList);
@@ -475,8 +476,8 @@ public class ProjectController {
 				inv = URLDecoder.decode(inv, "UTF-8");
 				Invoice invoice = (Invoice) JSONObject.toBean(JSONObject.fromObject(inv), Invoice.class);
 				invoice.setInvType("出项发票");
-				invoice.setInvMoney(invoice.getProMoney());
 				System.out.println("发票金额"+invoice.getProMoney());
+				invoice.setInvMoney(invoice.getProMoney());
 				projectService.addInvoice(invoice);
 				projectService.updateProInv(invoice.getProId());
 				JsonResult jr = new JsonResult();

@@ -7,6 +7,7 @@
       String basePath = request.getScheme()+"://"+ request.getServerName()+":"+request.getServerPort()+path+"/";%>
 <base href="<%=basePath%>">
 <head>
+
 <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="themes/icon.css">
 <link rel="stylesheet" type="text/css" href="themes/demo.css">
@@ -140,7 +141,7 @@ $(function (){
 	    	}          
 	      	],
 	 detailFormatter:function(index,row){//注意2 
-	        return '<div style="padding:2px"><table id="ddv-' + row.proId + '"></table></div>';  
+	        return '<div style="padding:2px"><table id="ddv-' + row.proId + '" ></table></div>';  
 },
 onExpandRow:function(index,row){//注意3  
 	$('#ddv-'+row.proId).datagrid({
@@ -220,6 +221,8 @@ onExpandRow:function(index,row){//注意3
 					return value;
 				}
 			}
+		},{		
+		field: 'expecteAT', title: '预计收货时间',align:'center', width: 80,
 		},
 		{
 			field: 'payables', title: '应付款',align:'center', width: 50
@@ -851,6 +854,7 @@ function addeditor(proId){
 				}
 				}				
 		});
+	
 	//进货总价
 	$('#ddv-'+proId).datagrid('addEditor',{
 			field:'costPrice',
@@ -861,7 +865,15 @@ function addeditor(proId){
 				}
 				}				
 		});
-	
+	$('#ddv-'+proId).datagrid('addEditor',{
+		field:'expecteAT',
+		editor: {//设置其为可编辑
+			type: 'datebox',
+			options: {
+			required: true//设置编辑规则属性
+			}
+			}				
+	});
 }
 //动态删除editor
 function deleteeditor(proId){
@@ -872,6 +884,7 @@ function deleteeditor(proId){
 	$('#ddv-'+proId).datagrid('removeEditor','supId');
 	$('#ddv-'+proId).datagrid('removeEditor','costUnitPrice');
 	$('#ddv-'+proId).datagrid('removeEditor','costPrice');
+	$('#ddv-'+proId).datagrid('removeEditor','expecteAT');
 }
 //动态添加和删除Editor函数
 $.extend($.fn.datagrid.methods, {
@@ -993,22 +1006,18 @@ function saveInv() {
 				<table id="projectTable" class="projectTable datagrid-toobar"
 					style="width: 70%; height: 100%">
 					<tr>
-						<th>项目类型:</th>
-						<td><input id="pTName" type="text" class="easyui-validatebox textbox" name="pTName"/></td>
-						<th>客户:</th>
-						<td><input id="cusId" type="text" class="easyui-combobox"
-							name="cusId" editable="true" /></td>	
+						<th>经理:</th>
+						<td><input id="proBrokerage" type="text" class="easyui-combobox"
+							name="proBrokerage" editable="false" /></td>
+						<th>预计收货时间:</th>
+						<td>
+						<input id="timestart" name="timestart" type="text" class="easyui-datebox"/>-
+						<input id="timeend" name="timeend" type="text" class="easyui-datebox"/>
+						</td>
+							</tr><tr>								
 						<td colspan="2"><a class="easyui-linkbutton"
 							icon="icon-search" href="javascript:void(0);"
 							onclick="searchProject();">查找</a></td>
-						</tr>
-							<tr>
-						<th>状态:</th>
-						<td><input id="status" class="easyui-validatebox" type="text" name="status"/></td>
-				
-						<th>经手人:</th>
-						<td><input id="proBrokerage" type="text" class="easyui-combobox"
-							name="proBrokerage" editable="false" /></td>	
 					<td colspan="2"><a id="clearBtn"
 							class="easyui-linkbutton" icon="icon-cancel"
 							href="javascript:void(0);" onclick="clearSearch();">重置</a></td>
@@ -1053,7 +1062,7 @@ function saveInv() {
     <div id="arrival" class="easyui-dialog"
 		style="width: 320px; height: 270px; padding: 10px 20px;" closed="true"
 		buttons="#arrival-buttons">
-		<form id="arrival-fm" method="post">
+		<form id="arrival-fm" method="post" >
 			<div class="fitem">
 				<label >采　购　单　号:</label> <input name="ordId"
 					class="easyui-validatebox" style="width: 140px;" required="true" readonly="readonly"/>

@@ -10,11 +10,13 @@
 <base href="<%=basePath%>">
 <head>
 <title>登陆页面</title>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
 <link rel="shortcut icon" href="../favicon.ico" />
 <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="themes/icon.css">
 <link rel="stylesheet" type="text/css" href="themes/demo.css">
 
+<script type="text/javascript" src="jquery/bootstrap.min.js"></script>
 <script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="jquery/jquery.easyui.min.js"></script>
 <script type="text/javascript"

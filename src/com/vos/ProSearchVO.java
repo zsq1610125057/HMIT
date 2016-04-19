@@ -9,6 +9,20 @@ private int firstRow;
 private int pageSize;
 private String pTName;
 private String cusId;
+private String timestart;
+public String getTimestart() {
+	return timestart;
+}
+public void setTimestart(String timestart) {
+	this.timestart = timestart;
+}
+public String getTimeend() {
+	return timeend;
+}
+public void setTimeend(String timeend) {
+	this.timeend = timeend;
+}
+private String timeend;
 
 public String getCusId() {
 	return cusId;

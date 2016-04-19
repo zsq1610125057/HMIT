@@ -24,6 +24,12 @@
                  </isNotEmpty> 
                    <isNotEmpty prepend="AND" property="cusId">       
                      <![CDATA[ cusId =#cusId#]]>    
+                 </isNotEmpty>  
+                 <isNotEmpty prepend="AND" property="timestart">       
+                     <![CDATA[ expecteAT >=#timestart#]]>    
+                 </isNotEmpty>  
+                 <isNotEmpty prepend="AND" property="timeend">       
+                     <![CDATA[ expecteAT <=#timeend#]]>    
                  </isNotEmpty>         
 		 </dynamic>	
 		limit #firstRow#,#pageSize#
@@ -47,7 +53,13 @@
                  </isNotEmpty> 
                    <isNotEmpty prepend="AND" property="cusId">       
                      <![CDATA[ cusId =#cusId#]]>    
-                 </isNotEmpty>         
+                 </isNotEmpty> 
+                 <isNotEmpty prepend="AND" property="timestart">       
+                     <![CDATA[ expecteAT >=#timestart#]]>    
+                 </isNotEmpty>  
+                 <isNotEmpty prepend="AND" property="timeend">       
+                     <![CDATA[ expecteAT <=#timeend#]]>    
+                 </isNotEmpty>            
 		 </dynamic>	
 		limit #firstRow#,#pageSize#
 	</select>
@@ -144,7 +156,7 @@
 	<select id="getOrderListByPager" resultClass="com.vos.Order"
 		parameterClass="java.util.Map">
 		
-				select payables,invId,equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName from (
+				select payables,invId,equDescription,sellTotalPrice,equName,status,sellPrice,ordId,equNumber,proName,proId,costUnitPrice,costPrice,payRemarks,IFNULL(a.SupId,"") as supId,s.SupName as supName,expecteAT from (
 				SELECT	
 					IFNULL(po.payables,"") AS payables,
 					po.InvId AS invId,
@@ -160,6 +172,7 @@
 					IFNULL(po.CostUnitPrice,"") AS CostUnitPrice,
 					IFNULL(po.CostPrice,"") AS CostPrice,
 					IFNULL(po.PayRemarks,"") AS PayRemarks,
+					po.ExpecteAT AS expecteAT,
 					po.SupId as SupId
 					FROM
 					purchaseorder AS po ,
@@ -178,7 +191,7 @@
 	
 	<update id="updateOrderSupInfo" parameterClass="com.vos.OrderVO">
 		update purchaseOrder set equNumber = #equNumber#,CostUnitPrice=#costUnitPrice#,CostPrice=#costPrice#,SellTotalPrice=#sellTotalPrice#,SellUnitPrice=#sellPrice#,
-			PayRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),supId = #supId# where ordId = #ordId#
+			PayRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),supId = #supId#,expecteAT=#expecteAT# where ordId = #ordId#
 	</update>
 	<update id="updateOrderSupInfo1" parameterClass="com.vos.Order">
 		update purchaseOrder set payRemarks=#payRemarks#,status=#action#,LastUpdateBy=#lastUpdateBy#,LastUpdateDate=str_to_date(now(),'%Y-%m-%d %H:%i:%s'),pWName=#payWay#,payDate=str_to_date(#payDate#, '%Y-%m-%d'),payables=#payables# where ordId = #ordId#

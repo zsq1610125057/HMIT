@@ -27,9 +27,16 @@ public class OrderVO {
 	private String arrivalTime;
 	private String payWay;
 	private String supName;
+	private String expecteAT;
 	
 	
 	
+	public String getExpecteAT() {
+		return expecteAT;
+	}
+	public void setExpecteAT(String expecteAT) {
+		this.expecteAT = expecteAT;
+	}
 	public String getSupName() {
 		return supName;
 	}
